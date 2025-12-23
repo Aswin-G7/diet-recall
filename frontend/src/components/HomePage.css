@@ -1,0 +1,77 @@
+/* General */
+.home-container {
+  min-height: 100vh;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Welcome Section */
+.welcome-banner {
+  background: #833AB4;
+  background: linear-gradient(241deg, rgba(131, 58, 180, 1) 0%, rgba(245, 213, 144, 1) 54%, rgba(249, 69, 252, 1) 100%);
+  color: black;
+  text-align: center;
+  
+}
+
+.welcome-banner h1 {
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+}
+
+.welcome-banner p {
+  font-size: 1.1rem;
+}
+
+/* Food Section */
+.food-section {
+  padding: 0px 20px;
+  text-align: center;
+}
+
+.food-section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+/* Food Grid */
+.food-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Food Card */
+.food-card {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-size: 1rem;
+}
+
+.food-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.food-icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+/* Footer */
+.footer {
+  margin-top: 10px;
+  background-color: #eaeaea;
+  padding: 12px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #555;
+}

@@ -1,0 +1,148 @@
+:root {
+  --light-purple: #eef2ff;
+  --purple: #a5b4fc;
+  --dark-purple: #4f46e5;
+  --darker-purple: #3730a3;
+}
+
+/* =====================
+   Sidebar container
+===================== */
+
+.sidebar {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 1000;
+}
+
+/* 🔑 Important wrapper */
+.menu-wrapper {
+  position: relative;
+}
+
+/* =====================
+   Hamburger + Items
+===================== */
+
+.hamburger-menu__container,
+.nav__item {
+  --size: 56px;
+  width: var(--size);
+  height: var(--size);
+  color: white;
+  background-color: var(--dark-purple);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in;
+
+  &:hover {
+    background-color: var(--darker-purple);
+  }
+}
+
+/* =====================
+   Hamburger
+===================== */
+
+.hamburger-menu {
+  width: 50%;
+  position: relative;
+
+  &__line {
+    background-color: var(--light-purple);
+    height: 3px;
+    border-radius: 2px;
+    position: absolute;
+    width: 100%;
+    transition: all 0.25s ease-in-out;
+  }
+
+  &__line:nth-child(1) {
+    top: -7px;
+  }
+
+  &__line:nth-child(2) {
+    top: 0;
+  }
+
+  &__line:nth-child(3) {
+    top: 7px;
+  }
+}
+
+.hamburger-menu--open {
+  .hamburger-menu__line:nth-child(1) {
+    top: 0;
+    transform: rotate(45deg);
+  }
+
+  .hamburger-menu__line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger-menu__line:nth-child(3) {
+    top: 0;
+    transform: rotate(-45deg);
+  }
+}
+
+/* =====================
+   Navigation
+===================== */
+
+.nav {
+  position: relative;
+}
+
+/* Hidden by default */
+.nav__item {
+  position: absolute;
+  top: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px) scale(0.9);
+  transition: all 0.25s ease-in-out;
+
+  i {
+    color: var(--light-purple);
+    width: 26px;
+    height: 26px;
+  }
+
+  &:hover .nav__item-text {
+    left: 120%;
+    opacity: 1;
+  }
+}
+
+/* Visible when open */
+.nav--open {
+  .nav__item {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+  }
+
+  .nav__item {
+    top: calc((var(--i) - 1) * 56px);
+  }
+}
+
+
+/* =====================
+   Text labels
+===================== */
+
+.nav__item-text {
+  position: absolute;
+  left: 110%;
+  opacity: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--dark-purple);
+  white-space: nowrap;
+  transition: all 0.3s ease-in-out;
+}

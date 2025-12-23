@@ -1,0 +1,26 @@
+.food-details-page {
+  padding: 24px;
+  text-align: center;
+}
+
+.food-details-card {
+  max-width: 500px;          /* Proper card width */
+  margin: auto;
+  border: 1px solid #ddd;
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+}
+
+.food-details-image {
+  width: 100%;               /* Fit inside card */
+  max-height: 300px;         /* Control image size */
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.food-info p {
+  margin: 8px 0;
+  text-align: left;
+}

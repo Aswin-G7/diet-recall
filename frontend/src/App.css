@@ -1,0 +1,15 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+.app {
+  min-height: 100vh;
+
+  background: #A3BAD4;
+background: linear-gradient(317deg, rgba(163, 186, 212, 1) 0%, rgba(174, 235, 204, 1) 54%, rgba(169, 179, 214, 1) 100%);
+
+  font-family: Arial, sans-serif;
+}

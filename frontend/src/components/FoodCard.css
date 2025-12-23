@@ -1,0 +1,33 @@
+/* Food Card */
+.food-card {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 14px;
+  padding: 12px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-align: center;
+}
+
+/* Image Wrapper (controls size) */
+.food-image-wrapper {
+  width: 100%;
+  height: 120px;           /* FIXED HEIGHT */
+  border-radius: 10px;
+  overflow: hidden;        /* IMPORTANT */
+  margin-bottom: 10px;
+}
+
+/* Image */
+.food-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;       /* MAGIC LINE */
+}
+
+/* Food Name */
+.food-name {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+}

@@ -1,0 +1,72 @@
+/* Container */
+.quick-actions-container {
+  background: #A3BAD4;
+background: linear-gradient(317deg, rgba(163, 186, 212, 1) 0%, rgba(174, 235, 204, 1) 54%, rgba(169, 179, 214, 1) 100%);
+  border: 1px solid #e0e0e0;
+  border-radius: 16px;
+  padding: 15px;
+  max-width: 900px;
+  margin: 30px auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Title */
+.quick-actions-title {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  margin-top: 0px;
+  color: #333;
+}
+
+/* Grid */
+.quick-actions-grid {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+/* Individual Action */
+.quick-action-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Circular Button */
+.quick-action-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: all 0.2s ease;
+}
+
+/* Hover Effect */
+.quick-action-button:hover {
+  background-color: #e8f5e9;
+  border-color: #2e7d32;
+  transform: translateY(-5px);
+}
+
+/* Icon */
+.quick-action-icon {
+  font-size: 2rem;
+}
+
+/* Label below button */
+.quick-action-label {
+  margin-top: 10px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
+}
