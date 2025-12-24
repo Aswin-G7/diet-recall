@@ -3,7 +3,8 @@
   margin-left: 25%;
   width: 600px;
   border-radius: 16px;
-  background: #ffffffcc;
+  background: transparent;
+  border: 1px solid white;
 }
 
 .todays-plan h2 {
@@ -19,11 +20,11 @@
 }
 
 .plan-card {
-  background-color: #f9fafb;
+  background-color: transparent;
   border-radius: 12px;
   padding: 16px;
   text-align: center;
-  border: 1px solid #e5e7eb;
+  border: 3px solid #5fa8bb;
 }
 
 .plan-card h3 {

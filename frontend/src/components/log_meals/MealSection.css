@@ -1,0 +1,55 @@
+/* Meal Card */
+.meal-card {
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Meal Heading */
+.meal-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+/* Inputs */
+.meal-input {
+  width: 90%;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease;
+}
+
+.meal-input:focus {
+  outline: none;
+  border-color: #2e7d32;
+}
+
+/* Button */
+.meal-button {
+  width: 30%;
+  background-color: #2e7d32;
+  color: #ffffff;
+  border: none;
+  padding: 10px 0;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-top: 6px;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Placeholder Text */
+.meal-placeholder {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: #777;
+  font-style: italic;
+}

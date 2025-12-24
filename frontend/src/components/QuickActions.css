@@ -13,7 +13,7 @@ background: linear-gradient(317deg, rgba(163, 186, 212, 1) 0%, rgba(174, 235, 20
 /* Title */
 .quick-actions-title {
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   margin-bottom: 15px;
   margin-top: 0px;
   color: #333;
@@ -36,8 +36,8 @@ background: linear-gradient(317deg, rgba(163, 186, 212, 1) 0%, rgba(174, 235, 20
 
 /* Circular Button */
 .quick-action-button {
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   border: 1px solid #ddd;
   background-color: #f9f9f9;
@@ -59,13 +59,13 @@ background: linear-gradient(317deg, rgba(163, 186, 212, 1) 0%, rgba(174, 235, 20
 
 /* Icon */
 .quick-action-icon {
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 /* Label below button */
 .quick-action-label {
   margin-top: 10px;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   font-weight: 500;
   color: #333;
   text-align: center;

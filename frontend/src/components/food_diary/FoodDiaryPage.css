@@ -1,0 +1,11 @@
+.food-diary-page {
+  padding: 24px;
+  max-width: 900px;
+  margin: auto;
+}
+
+.food-diary-title {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
