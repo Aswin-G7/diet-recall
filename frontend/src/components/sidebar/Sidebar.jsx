@@ -1,14 +1,27 @@
 import { useEffect, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./Sidebar.scss";
 import feather from "feather-icons";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const navRef = useRef(null);
   const hamburgerRef = useRef(null);
 
   useEffect(() => {
     feather.replace();
   }, []);
+
+  useEffect(() => {
+  // Close sidebar whenever route changes
+  navRef.current?.classList.remove("nav--open");
+  hamburgerRef.current?.classList.remove("hamburger-menu--open");
+
+  feather.replace();
+}, [location.pathname]);
+
 
   const toggleMenu = () => {
     navRef.current.classList.toggle("nav--open");
@@ -36,7 +49,7 @@ const Sidebar = () => {
         </div>
 
         <nav className="nav" ref={navRef}>
-          <div className="nav__item" style={{ "--i": 1 }}>
+          <div className="nav__item" style={{ "--i": 1 }} onClick={() => navigate('/')}>
             <i data-feather="home"></i>
             <span className="nav__item-text">Home</span>
           </div>
@@ -51,7 +64,7 @@ const Sidebar = () => {
             <span className="nav__item-text">Settings</span>
           </div>
 
-          <div className="nav__item" style={{ "--i": 4 }}>
+          <div className="nav__item" style={{ "--i": 4 }} onClick={() => navigate('/profile')}>
             <i data-feather="user"></i>
             <span className="nav__item-text">Profile</span>
           </div>

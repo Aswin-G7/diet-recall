@@ -1,0 +1,11 @@
+.profile-page {
+  max-width: 700px;
+  margin: auto;
+  padding: 24px;
+}
+
+.profile-title {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}

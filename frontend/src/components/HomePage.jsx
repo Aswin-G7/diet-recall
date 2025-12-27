@@ -5,7 +5,7 @@ import Footer from './Footer'
 
 import './HomePage.css'
 import QuickActions from './QuickActions'
-import Sidebar from './Sidebar'
+import Sidebar from './sidebar/Sidebar'
 import TodaysPlan from './TodaysPlan'
 
 const HomePage = () => {
