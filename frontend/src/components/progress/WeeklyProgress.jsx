@@ -1,31 +1,72 @@
 import React from "react";
-
-import './WeeklyProgress.css'
+import Chart from "react-apexcharts";
+import "./WeeklyProgress.css";
 
 const WeeklyProgress = () => {
-  return (
-    <section className="progress-section">
-      <h2 className="section-title">Weekly Progress</h2>
+  const chartOptions = {
+    chart: {
+      type: "bar",
+      toolbar: { show: false },
+    },
+    plotOptions: {
+      bar: {
+        borderRadius: 8,
+        columnWidth: "55%",
+      },
+    },
+    dataLabels: { enabled: false },
+    xaxis: {
+      categories: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    },
+    yaxis: {
+      labels: { show: false },
+    },
+    grid: { show: false },
+    colors: ["#22c55e"],
+  };
 
-      <div className="weekly-summary">
-        <div className="weekly-card">
-          <h4>Average Calories</h4>
-          <p>1720 kcal</p>
+  const chartSeries = [
+    {
+      name: "Calories",
+      data: [1600, 1750, 1680, 1800, 1900, 1700, 1650],
+    },
+  ];
+
+  return (
+    <section className="weekly-progress-card">
+      {/* Header */}
+      <div className="progress-header">
+        <div className="header-left">
+          <div className="icon-circle">🔥</div>
+          <div>
+            <h3>Weekly Calories</h3>
+            <p>Average intake</p>
+          </div>
         </div>
 
-        <div className="weekly-card trend up">
-          <h4>Trend</h4>
-          <p>⬆ +120 kcal</p>
+        <span className="trend-badge up">⬆ 4.2%</span>
+      </div>
+
+      {/* Stats */}
+      <div className="progress-stats">
+        <div>
+          <span>Average</span>
+          <strong>1720 kcal</strong>
+        </div>
+        <div>
+          <span>Best Day</span>
+          <strong>Sat</strong>
         </div>
       </div>
 
-      <div className="weekly-chart">
-        {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, i) => (
-          <div key={i} className="chart-bar">
-            <div className="bar" style={{ height: `${40 + i * 5}px` }}></div>
-            <span>{day}</span>
-          </div>
-        ))}
+      {/* Chart */}
+      <div className="chart-wrapper">
+        <Chart
+          options={chartOptions}
+          series={chartSeries}
+          type="bar"
+          height={260}
+        />
       </div>
     </section>
   );

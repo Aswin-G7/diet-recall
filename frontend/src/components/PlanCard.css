@@ -1,0 +1,137 @@
+.plan-card-wrapper {
+  width: 200px;
+  perspective: 1000px;
+}
+
+/* Card base */
+.card {
+  overflow: visible;
+  width: 190px;
+  height: 260px;
+}
+
+.content {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.4s ease;
+  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+}
+
+.card:hover .content {
+  transform: rotateY(180deg);
+}
+
+/* Front & back */
+.front,
+.back {
+  background-color: #43907c;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-content {
+  text-align: center;
+  color: #fff;
+}
+
+.back-content h3 {
+  margin-bottom: 8px;
+}
+
+.front {
+  transform: rotateY(180deg);
+  color: white;
+}
+
+/* Front content */
+.front-content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.badge {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  width: fit-content;
+}
+
+.description {
+  background: rgba(0, 0, 0, 0.7);
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.title {
+  font-size: 14px;
+}
+
+.card-footer {
+  font-size: 11px;
+  color: #bbb;
+  margin-top: 4px;
+}
+
+.calories {
+  margin-top: 6px;
+  font-weight: bold;
+  color: #20c997;
+}
+
+/* Animated background */
+.img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.circle {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background-color: #ffbb66;
+  filter: blur(18px);
+  animation: floating 3s infinite ease-in-out;
+}
+
+#bottom {
+  background-color: #ff8866;
+  width: 140px;
+  height: 140px;
+}
+
+#right {
+  background-color: #ff2233;
+  width: 30px;
+  height: 30px;
+}
+
+@keyframes floating {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(12px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}

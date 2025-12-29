@@ -10,6 +10,7 @@ export const fetchNutritionData = async (query) => {
     }
   );
 
+
   if (!response.ok) {
     throw new Error("API Ninjas request failed");
   }

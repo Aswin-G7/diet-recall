@@ -1,36 +1,66 @@
 import { useState, useRef, useEffect } from "react";
 import "./NutriChat.css";
+import SendButton from "../SendButton";
 
 const NutriChat = () => {
   const [messages, setMessages] = useState([
-    { id: 1, text: "Hi! I'm Nutri Chat 🤖. Ask me anything about nutrition.", sender: "bot" }
+    {
+      id: 1,
+      text: "Hi! I'm Nutri Chat 🤖. Ask me anything about nutrition.",
+      sender: "bot",
+    },
   ]);
   const [input, setInput] = useState("");
   const messagesEndRef = useRef(null);
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (!input.trim()) return;
 
-    const userMessage = {
-      id: Date.now(),
-      text: input,
-      sender: "user"
-    };
+    const userText = input;
 
-    setMessages(prev => [...prev, userMessage]);
+    // Add user message to UI
+    setMessages((prev) => [
+      ...prev,
+      { id: Date.now(), text: userText, sender: "user" },
+    ]);
+
     setInput("");
 
-    // Mock bot reply
-    setTimeout(() => {
-      setMessages(prev => [
+    try {
+      // Convert UI messages to API format
+      const apiMessages = [{ role: "user", content: userText }];
+
+      const response = await fetch("http://localhost:5000/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: apiMessages }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Chat API failed");
+      }
+
+      const data = await response.json();
+
+      // Add bot reply to UI
+      setMessages((prev) => [
         ...prev,
         {
           id: Date.now() + 1,
-          text: "Thanks for your question! Nutrition advice coming soon 😊",
-          sender: "bot"
-        }
+          text: data.reply,
+          sender: "bot",
+        },
       ]);
-    }, 800);
+    } catch (err) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now() + 2,
+          text: "Sorry, I couldn’t reply right now 😕",
+          sender: "bot",
+        },
+      ]);
+    }
   };
 
   useEffect(() => {
@@ -42,7 +72,7 @@ const NutriChat = () => {
       <header className="chat-header">Nutri Chat</header>
 
       <div className="chat-messages">
-        {messages.map(msg => (
+        {messages.map((msg) => (
           <div
             key={msg.id}
             className={`message-row ${msg.sender === "user" ? "user" : "bot"}`}
@@ -63,7 +93,11 @@ const NutriChat = () => {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
         />
-        <button onClick={sendMessage}>Send</button>
+        <SendButton
+          onClick={sendMessage}
+          disabled={!input.trim()}
+          label="Send"
+        />
       </div>
     </div>
   );
