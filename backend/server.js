@@ -1,10 +1,14 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import connectDB from './config/db.js'
+//routes
 import nutritionRoutes from "./routes/nutrition.routes.js";
 import chatRoutes from "./routes/chat.routes.js";
+import mealRoutes from "./routes/meal.routes.js";
 
 dotenv.config();
+connectDB();
 
 const app = express();
 
@@ -14,6 +18,8 @@ app.use(express.json());
 app.use("/api/nutrition", nutritionRoutes);
 
 app.use("/api/chat", chatRoutes);
+
+app.use("/api/meals", mealRoutes);
 
 const PORT = process.env.PORT || 5000;
 
