@@ -8,8 +8,11 @@ const MealSection = ({ title, placeholder, mealType }) => {
   const [error, setError] = useState("");
   const [registering, setRegistering] = useState(false);
   const [success, setSuccess] = useState("");
-  const [isDirty, setIsDirty] = useState(true);
 
+  const [hasFetched, setHasFetched] = useState(false);
+  const [hasRegistered, setHasRegistered] = useState(false);
+
+  // ---------------- FETCH NUTRITION ----------------
   const fetchNutrition = async () => {
     if (!query.trim()) return;
 
@@ -20,9 +23,7 @@ const MealSection = ({ title, placeholder, mealType }) => {
     try {
       const response = await fetch("http://localhost:5000/api/nutrition", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query }),
       });
 
@@ -32,7 +33,7 @@ const MealSection = ({ title, placeholder, mealType }) => {
 
       const data = await response.json();
       setNutritionData(data);
-      setIsDirty(false); // 🔒 lock buttons
+      setHasFetched(true); // ✅ nutrition fetched
     } catch (err) {
       setError("Failed to fetch nutrition data");
     } finally {
@@ -40,6 +41,7 @@ const MealSection = ({ title, placeholder, mealType }) => {
     }
   };
 
+  // ---------------- REGISTER MEAL ----------------
   const registerMeal = async () => {
     setRegistering(true);
     setError("");
@@ -48,7 +50,7 @@ const MealSection = ({ title, placeholder, mealType }) => {
     try {
       let dataToRegister = nutritionData;
 
-      // If user didn't click "Get Nutrition" first
+      // Safety: fetch nutrition if user skipped it
       if (nutritionData.length === 0) {
         const response = await fetch("http://localhost:5000/api/nutrition", {
           method: "POST",
@@ -61,18 +63,18 @@ const MealSection = ({ title, placeholder, mealType }) => {
         }
 
         dataToRegister = await response.json();
-        setNutritionData(dataToRegister); // show table also
+        setNutritionData(dataToRegister);
+        setHasFetched(true);
       }
 
-      // Register meal
       const saveResponse = await fetch(
         "http://localhost:5000/api/meals/register",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            mealType, // ✅ REQUIRED
-            query, // ✅ REQUIRED (rawInput)
+            mealType,
+            query,
             nutritionData: dataToRegister,
           }),
         }
@@ -83,7 +85,7 @@ const MealSection = ({ title, placeholder, mealType }) => {
       }
 
       setSuccess("Meal registered successfully ✅");
-      setIsDirty(false); // 🔒 lock buttons
+      setHasRegistered(true); // ✅ meal saved
     } catch (err) {
       setError(err.message || "Something went wrong");
     } finally {
@@ -91,6 +93,7 @@ const MealSection = ({ title, placeholder, mealType }) => {
     }
   };
 
+  // ---------------- UI ----------------
   return (
     <div className="meal-card">
       <h2 className="meal-title">{title}</h2>
@@ -102,27 +105,33 @@ const MealSection = ({ title, placeholder, mealType }) => {
         value={query}
         onChange={(e) => {
           setQuery(e.target.value);
-          setIsDirty(true); // 🔑 re-enable buttons only when input changes
+          setHasFetched(false);
+          setHasRegistered(false);
+          setSuccess("");
+          setNutritionData([]);
         }}
       />
 
+      {/* GET NUTRITION */}
       <button
         className="meal-button"
         onClick={fetchNutrition}
-        disabled={loading || !query.trim() || !isDirty}
+        disabled={loading || !query.trim() || hasFetched}
       >
         {loading ? "Fetching..." : "Get Nutrition"}
       </button>
 
+      {/* REGISTER MEAL */}
       <button
         className="meal-button secondary"
         onClick={registerMeal}
-        disabled={registering || !query.trim() || !isDirty}
+        disabled={registering || !query.trim() || hasRegistered}
       >
         {registering ? "Registering..." : "Register Meal"}
       </button>
 
       {error && <p className="error">{error}</p>}
+      {success && <p className="success">{success}</p>}
 
       {nutritionData.length > 0 && (
         <div className="nutrition-table-wrapper">
@@ -130,11 +139,11 @@ const MealSection = ({ title, placeholder, mealType }) => {
             <thead>
               <tr>
                 <th>Food</th>
-                <th>Calories (kcal)</th>
+                <th>Calories</th>
                 <th>Serving (g)</th>
                 <th>Protein (g)</th>
-                <th>Total Fat (g)</th>
-                <th>Saturated Fat (g)</th>
+                <th>Fat (g)</th>
+                <th>Sat. Fat (g)</th>
                 <th>Carbs (g)</th>
                 <th>Fiber (g)</th>
                 <th>Sugar (g)</th>
@@ -143,7 +152,6 @@ const MealSection = ({ title, placeholder, mealType }) => {
                 <th>Cholesterol (mg)</th>
               </tr>
             </thead>
-
             <tbody>
               {nutritionData.map((item, index) => (
                 <tr key={index}>

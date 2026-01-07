@@ -10,9 +10,16 @@ export const registerMeal = async (req, res) => {
       return res.status(400).json({ message: "mealType is required" });
     }
 
-    let finalData = nutritionData;
+    let finalData = nutritionData?.map((item) => ({
+      name: item.name,
+      calories: item.calories ?? 0,
+      serving: item.serving_size_g ?? item.serving ?? 0,
+      protein: item.protein_g ?? item.protein ?? 0,
+      carbs: item.carbohydrates_total_g ?? item.carbs ?? 0,
+      sugar: item.sugar_g ?? item.sugar ?? 0,
+      cholesterol: item.cholesterol_mg ?? item.cholesterol ?? 0,
+    }));
 
-    
     // 🔹 If nutrition not provided → fetch first
     if ((!finalData || finalData.length === 0) && query) {
       const data = await fetchNutritionData(query);
