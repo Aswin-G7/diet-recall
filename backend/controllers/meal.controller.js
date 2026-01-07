@@ -94,3 +94,38 @@ export const registerMeal = async (req, res) => {
     res.status(500).json({ message: "Failed to register meal" });
   }
 };
+
+export const getTodaySummary = async (req, res) => {
+  try {
+    const start = new Date();
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date();
+    end.setHours(23, 59, 59, 999);
+
+    const meals = await Meal.find({
+      createdAt: { $gte: start, $lte: end },
+    });
+
+    const summary = meals.reduce(
+      (acc, meal) => {
+        acc.calories += meal.totalCalories || 0;
+        acc.protein += meal.totalProtein || 0;
+
+        meal.foods.forEach((f) => {
+          acc.carbs += f.carbs || 0;
+          acc.sugar += f.sugar || 0;
+        });
+
+        return acc;
+      },
+      { calories: 0, protein: 0, carbs: 0, sugar: 0 }
+    );
+
+    res.status(200).json(summary);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch summary" });
+  }
+};
+
