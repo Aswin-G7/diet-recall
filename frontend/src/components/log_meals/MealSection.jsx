@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./MealSection.css";
 
-const MealSection = ({ title, placeholder }) => {
+const MealSection = ({ title, placeholder, mealType }) => {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [nutritionData, setNutritionData] = useState([]);
@@ -70,7 +70,11 @@ const MealSection = ({ title, placeholder }) => {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ nutritionData: dataToRegister }),
+          body: JSON.stringify({
+            mealType, // ✅ REQUIRED
+            query, // ✅ REQUIRED (rawInput)
+            nutritionData: dataToRegister,
+          }),
         }
       );
 
@@ -99,7 +103,7 @@ const MealSection = ({ title, placeholder }) => {
         onChange={(e) => {
           setQuery(e.target.value);
           setIsDirty(true); // 🔑 re-enable buttons only when input changes
-          }}
+        }}
       />
 
       <button

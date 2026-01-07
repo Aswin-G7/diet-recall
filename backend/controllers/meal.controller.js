@@ -4,12 +4,19 @@ import { estimateCaloriesAndProtein } from "../services/openRouter.service.js";
 
 export const registerMeal = async (req, res) => {
   try {
-    let { nutritionData, query } = req.body;
+    const { nutritionData, query, mealType } = req.body;
+
+    if (!mealType) {
+      return res.status(400).json({ message: "mealType is required" });
+    }
+
     let finalData = nutritionData;
 
+    
     // 🔹 If nutrition not provided → fetch first
-    if (!finalData && query) {
+    if ((!finalData || finalData.length === 0) && query) {
       const data = await fetchNutritionData(query);
+
       finalData = [];
 
       for (const item of data) {
@@ -30,9 +37,13 @@ export const registerMeal = async (req, res) => {
         }
 
         finalData.push({
-          ...item,
-          calories,
-          protein_g: protein,
+          name: item.name,
+          calories: calories ?? 0,
+          serving: item.serving_size_g ?? 0,
+          protein: protein ?? 0, // <-- Use 0 if missing
+          carbs: item.carbohydrates_total_g ?? 0,
+          sugar: item.sugar_g ?? 0,
+          cholesterol: item.cholesterol_mg ?? 0,
         });
       }
     }
@@ -41,28 +52,36 @@ export const registerMeal = async (req, res) => {
       return res.status(400).json({ message: "No nutrition data available" });
     }
 
-    // 🔹 Save only required fields
-    const savedMeals = [];
+    // 🔹 Calculate totals
+    const totalCalories = finalData.reduce(
+      (sum, f) => sum + (f.calories || 0),
+      0
+    );
 
-    for (const item of finalData) {
-      const meal = await Meal.create({
-        foodName: item.name,
-        calories: item.calories,
-        serving: item.serving_size_g,
-        protein: item.protein_g,
-        carbs: item.carbohydrates_total_g,
-        sugar: item.sugar_g,
-        cholesterol: item.cholesterol_mg,
-      });
+    const totalProtein = finalData.reduce(
+      (sum, f) => sum + (f.protein || 0),
+      0
+    );
 
-      savedMeals.push(meal);
-    }
+    // console.log("Final data to be saved:", finalData);
+
+    // finalData.forEach((f) => {
+    //   console.log(f.name, "protein:", f.protein, typeof f.protein);
+    // });
+
+    // 🔹 Create ONE meal document
+    const meal = await Meal.create({
+      mealType,
+      rawInput: query,
+      foods: finalData,
+      totalCalories,
+      totalProtein,
+    });
 
     res.status(201).json({
       message: "Meal registered successfully",
-      meals: savedMeals,
+      meal,
     });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Failed to register meal" });

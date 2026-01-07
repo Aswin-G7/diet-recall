@@ -11,13 +11,27 @@ function safeJSONParse(text) {
     throw new Error("Empty or invalid LLM response");
   }
 
+  // Remove markdown fences
   const cleaned = text
     .replace(/```json/gi, "")
     .replace(/```/g, "")
     .trim();
 
-  return JSON.parse(cleaned);
+  // 🔐 Extract first JSON object ONLY
+  const match = cleaned.match(/\{[\s\S]*\}/);
+
+  if (!match) {
+    throw new Error("No JSON object found in LLM response");
+  }
+
+  try {
+    return JSON.parse(match[0]);
+  } catch (err) {
+    console.error("JSON parse failed. Raw content:\n", cleaned);
+    throw err;
+  }
 }
+
 
 export const estimateCaloriesAndProtein = async (food) => {
   const prompt = `
