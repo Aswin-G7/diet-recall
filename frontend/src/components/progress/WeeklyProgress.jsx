@@ -1,8 +1,40 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import "./WeeklyProgress.css";
 
 const WeeklyProgress = () => {
+  const [labels, setLabels] = useState([]);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchWeeklyCalories = async () => {
+      try {
+        const res = await fetch(
+          "http://localhost:5000/api/meals/weekly-calories"
+        );
+        const result = await res.json();
+
+        setLabels(result.labels);
+        setData(result.data);
+      } catch (error) {
+        console.error("Failed to fetch weekly calories", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWeeklyCalories();
+  }, []);
+
+  // 📊 Calculations
+  const total = data.reduce((sum, val) => sum + val, 0);
+  const average = data.length ? Math.round(total / data.length) : 0;
+
+  const maxCalories = Math.max(...data);
+  const bestDayIndex = data.indexOf(maxCalories);
+  const bestDay = maxCalories > 0 ? labels[bestDayIndex] : "-";
+
   const chartOptions = {
     chart: {
       type: "bar",
@@ -16,7 +48,7 @@ const WeeklyProgress = () => {
     },
     dataLabels: { enabled: false },
     xaxis: {
-      categories: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      categories: labels,
     },
     yaxis: {
       labels: { show: false },
@@ -28,9 +60,13 @@ const WeeklyProgress = () => {
   const chartSeries = [
     {
       name: "Calories",
-      data: [1600, 1750, 1680, 1800, 1900, 1700, 1650],
+      data: data,
     },
   ];
+
+  if (loading) {
+    return <p className="loading-text">Loading weekly progress...</p>;
+  }
 
   return (
     <section className="weekly-progress-card">
@@ -43,19 +79,17 @@ const WeeklyProgress = () => {
             <p>Average intake</p>
           </div>
         </div>
-
-        <span className="trend-badge up">⬆ 4.2%</span>
       </div>
 
       {/* Stats */}
       <div className="progress-stats">
         <div>
           <span>Average</span>
-          <strong>1720 kcal</strong>
+          <strong>{average} kcal</strong>
         </div>
         <div>
           <span>Best Day</span>
-          <strong>Sat</strong>
+          <strong>{bestDay}</strong>
         </div>
       </div>
 

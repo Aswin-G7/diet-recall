@@ -129,3 +129,56 @@ export const getTodaySummary = async (req, res) => {
   }
 };
 
+export const getWeeklyCalories = async (req, res) => {
+  try {
+    // 🔹 Get current time in IST
+    const nowIST = new Date(
+      new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+    );
+
+    // 🔹 End of today (IST)
+    const endIST = new Date(nowIST);
+    endIST.setHours(23, 59, 59, 999);
+
+    // 🔹 Start of 6 days ago (IST)
+    const startIST = new Date(endIST);
+    startIST.setDate(startIST.getDate() - 6);
+    startIST.setHours(0, 0, 0, 0);
+
+    // 🔹 Convert IST → UTC for MongoDB
+    const startUTC = new Date(startIST.toISOString());
+    const endUTC = new Date(endIST.toISOString());
+
+    const meals = await Meal.find({
+      createdAt: { $gte: startUTC, $lte: endUTC },
+    });
+
+    const daysMap = {
+      Mon: 0,
+      Tue: 0,
+      Wed: 0,
+      Thu: 0,
+      Fri: 0,
+      Sat: 0,
+      Sun: 0,
+    };
+
+    meals.forEach((meal) => {
+      const day = meal.createdAt.toLocaleDateString("en-US", {
+        weekday: "short",
+        timeZone: "Asia/Kolkata",
+      });
+
+      daysMap[day] += meal.totalCalories || 0;
+    });
+
+    res.status(200).json({
+      labels: Object.keys(daysMap),
+      data: Object.values(daysMap),
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch weekly calories" });
+  }
+};
+
