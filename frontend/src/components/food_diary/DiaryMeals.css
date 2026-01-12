@@ -9,6 +9,9 @@
   border-radius: 10px;
   padding: 16px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+  /* IMPORTANT */
+  overflow: hidden;
 }
 
 .meal-header {
@@ -35,3 +38,48 @@
   color: #888;
   font-size: 14px;
 }
+
+.meal-entry {
+  margin-top: 12px;
+}
+
+.meal-total {
+  padding: 10px;
+}
+
+/* Scroll container */
+.nutrition-table-wrapper {
+  margin-top: 8px;
+  overflow-x: auto;
+}
+
+/* Table stays a real table */
+.nutrition-table {
+  width: 100%;
+  min-width: 500px; /* forces scroll on small screens */
+  border-collapse: collapse;
+}
+
+.nutrition-table th,
+.nutrition-table td {
+  padding: 8px 10px;
+  text-align: left;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+  white-space: nowrap;
+}
+
+.nutrition-table th {
+  background: #f8f8f8;
+  font-weight: 600;
+}
+
+.nutrition-table-wrapper::-webkit-scrollbar {
+  height: 6px;
+}
+
+.nutrition-table-wrapper::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+

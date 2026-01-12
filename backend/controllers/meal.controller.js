@@ -182,3 +182,15 @@ export const getWeeklyCalories = async (req, res) => {
   }
 };
 
+export const getDiaryMeals = async (req, res) => {
+  try {
+    const meals = await Meal.find()
+      .sort({ createdAt: -1 }); // latest first
+
+    res.status(200).json(meals);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch diary meals" });
+  }
+};
+
