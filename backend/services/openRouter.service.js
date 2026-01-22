@@ -11,13 +11,11 @@ function safeJSONParse(text) {
     throw new Error("Empty or invalid LLM response");
   }
 
-  // Remove markdown fences
   const cleaned = text
     .replace(/```json/gi, "")
     .replace(/```/g, "")
     .trim();
 
-  // 🔐 Extract first JSON object ONLY
   const match = cleaned.match(/\{[\s\S]*\}/);
 
   if (!match) {
@@ -32,7 +30,43 @@ function safeJSONParse(text) {
   }
 }
 
+/**
+ * 🔹 GENERIC OpenRouter JSON caller (REUSABLE)
+ */
+export const callOpenRouterJSON = async (prompt, temperature = 0.3) => {
+  try {
+    const response = await axios.post(
+      "https://openrouter.ai/api/v1/chat/completions",
+      {
+        model: "google/gemma-3-27b-it:free",
+        messages: [{ role: "user", content: prompt }],
+        temperature
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": "http://localhost:5000",
+          "X-Title": "Diet Recall App"
+        }
+      }
+    );
 
+    const rawOutput = response?.data?.choices?.[0]?.message?.content;
+    return safeJSONParse(rawOutput);
+
+  } catch (error) {
+    console.error(
+      "OpenRouter service error:",
+      error.response?.data || error.message
+    );
+    throw new Error("OpenRouter request failed");
+  }
+};
+
+/**
+ * 🔹 EXISTING FUNCTION (UNCHANGED, but now cleaner)
+ */
 export const estimateCaloriesAndProtein = async (food) => {
   const prompt = `
 You are a nutrition expert.
@@ -51,33 +85,5 @@ Input JSON:
 ${JSON.stringify(food, null, 2)}
 `;
 
-  try {
-    const response = await axios.post(
-      "https://openrouter.ai/api/v1/chat/completions",
-      {
-        model: "google/gemma-3-27b-it:free",
-        messages: [{ role: "user", content: prompt }],
-        temperature: 0.2
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-          "Content-Type": "application/json",
-          "HTTP-Referer": "http://localhost:5000",
-          "X-Title": "Diet Recall App"
-        }
-      }
-    );
-
-    const rawOutput = response?.data?.choices?.[0]?.message?.content;
-
-    return safeJSONParse(rawOutput);
-
-  } catch (error) {
-    console.error(
-      "OpenRouter service error:",
-      error.response?.data || error.message
-    );
-    throw new Error("Failed to estimate calories and protein");
-  }
+  return callOpenRouterJSON(prompt, 0.2);
 };

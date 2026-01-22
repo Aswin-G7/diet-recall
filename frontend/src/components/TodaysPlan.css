@@ -1,7 +1,7 @@
 .todays-plan {
   padding: 20px;
-  margin-left: 25%;
-  width: 600px;
+  margin-left: 18%;
+  width: 800px;
   border-radius: 16px;
   background: transparent;
   border: 1px solid white;
@@ -14,17 +14,21 @@
 }
 
 .plan-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 16px;
+  display: flex;
+  flex-direction: row;  /* Forces them into a line */
+  justify-content: space-between; /* Spreads them out evenly */
+  gap: 10px;            /* Reduced gap to save space */
+  width: 100%;
 }
 
 .plan-card {
+  flex: 1;              /* Forces all cards to be the exact same width */
+  min-width: 0;         /* Crucial: allows cards to shrink smaller than their content */
   background-color: transparent;
   border-radius: 12px;
-  padding: 16px;
+  padding: 10px 5px;    /* Reduced padding to fit text */
   text-align: center;
-  border: 3px solid #5fa8bb;
+  border: 2px solid #5fa8bb; /* Slightly thinner border to save space */
 }
 
 .plan-card h3 {
