@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import "./NutriChat.css";
 import SendButton from "../SendButton";
+import ChatInput from "./ChatInput";
 
 const NutriChat = () => {
   const [messages, setMessages] = useState([
@@ -86,8 +87,7 @@ const NutriChat = () => {
       </div>
 
       <div className="chat-input">
-        <input
-          type="text"
+        <ChatInput 
           placeholder="Ask about calories, protein, diet..."
           value={input}
           onChange={(e) => setInput(e.target.value)}

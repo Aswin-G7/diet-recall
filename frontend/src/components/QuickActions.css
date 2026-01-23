@@ -62,6 +62,10 @@ background: linear-gradient(317deg, rgba(163, 186, 212, 1) 0%, rgba(174, 235, 20
   font-size: 1.5rem;
 }
 
+.quick-action-icon-img {
+  padding-top: 6px;
+}
+
 /* Label below button */
 .quick-action-label {
   margin-top: 10px;

@@ -1,0 +1,69 @@
+.progress-btn-container {
+  width: 50px;
+  height: 50px;
+  background-color: #f0f0f0; /* Light grey bg to make bars pop */
+  border: none;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: background-color 0.3s ease;
+}
+
+.progress-btn-container:hover {
+  background-color: #e2e2e2;
+}
+
+.bar-wrapper {
+  position: relative;
+  width: 35px; /* Scaled down for the button */
+  height: 30px;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.progress-bar {
+  width: 5px;
+  height: 100%;
+  background: #000;
+  transform-origin: bottom;
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
+  /* Animation is paused by default */
+  animation-play-state: paused; 
+}
+
+/* Individual Bar Scales & Animation assignments */
+.progress-bar:nth-child(1) { transform: scale(1, 0.2); animation: barUp1 4s infinite; }
+.progress-bar:nth-child(2) { transform: scale(1, 0.4); animation: barUp2 4s infinite; }
+.progress-bar:nth-child(3) { transform: scale(1, 0.6); animation: barUp3 4s infinite; }
+.progress-bar:nth-child(4) { transform: scale(1, 0.8); animation: barUp4 4s infinite; }
+.progress-bar:nth-child(5) { transform: scale(1, 1.0); animation: barUp5 4s infinite; }
+
+/* Trigger animation on Hover */
+.progress-btn-container:hover .progress-bar {
+  animation-play-state: running;
+}
+
+/* Keyframes (Kept from your source) */
+@keyframes barUp1 { 
+  0%, 40%, 100% { transform: scale(1, 0.2); } 
+  50%, 90% { transform: scale(1, 1); } 
+}
+@keyframes barUp2 { 
+  0%, 40%, 100% { transform: scale(1, 0.4); } 
+  50%, 90% { transform: scale(1, 0.8); } 
+}
+@keyframes barUp3 { 
+  0%, 100% { transform: scale(1, 0.6); } 
+}
+@keyframes barUp4 { 
+  0%, 40%, 100% { transform: scale(1, 0.8); } 
+  50%, 90% { transform: scale(1, 0.4); } 
+}
+@keyframes barUp5 { 
+  0%, 40%, 100% { transform: scale(1, 1); } 
+  50%, 90% { transform: scale(1, 0.2); } 
+}

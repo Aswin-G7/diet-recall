@@ -1,5 +1,6 @@
 import { generateTodaysPlan } from "../services/mealPlan.service.js";
 import Meal from "../models/Meal.js";
+import DailyPlan from "../models/DailyPlan.js";
 
 export const getTodaysPlan = async (req, res) => {
   try {
@@ -9,17 +10,25 @@ export const getTodaysPlan = async (req, res) => {
       weight,
       goal,
       conditions = [],
-      dailyCalorieTarget = 1800 // fallback
+      dailyCalorieTarget = 1800
     } = req.body;
 
-    // Required fields
     if (!age || !goal) {
       return res.status(400).json({
         message: "age and goal are required"
       });
     }
 
-    // 🔹 Calculate today's consumed calories
+    // 🔹 Today's date key (YYYY-MM-DD)
+    const todayKey = new Date().toISOString().split("T")[0];
+
+    // 🔹 1. Check if plan already exists (fast path)
+    const existingPlan = await DailyPlan.findOne({ date: todayKey });
+    if (existingPlan) {
+      return res.status(200).json(existingPlan.plan);
+    }
+
+    // 🔹 2. Calculate today's consumed calories
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -37,17 +46,25 @@ export const getTodaysPlan = async (req, res) => {
       500
     );
 
-    // 🔹 Generate AI plan
+    // 🔹 3. Generate AI plan
     const plan = await generateTodaysPlan({
       age,
-      height,            // optional
-      weight,            // optional
+      height,
+      weight,
       goal,
       conditions,
       remainingCalories
     });
 
-    res.status(200).json(plan);
+    // 🔹 4. ATOMIC UPSERT (prevents duplicate key error)
+    const savedPlan = await DailyPlan.findOneAndUpdate(
+      { date: todayKey },
+      { $setOnInsert: { date: todayKey, plan } },
+      { new: true, upsert: true }
+    );
+
+    res.status(200).json(savedPlan.plan);
+
   } catch (err) {
     console.error("Plan controller error:", err);
     res.status(500).json({
