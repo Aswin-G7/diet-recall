@@ -6,7 +6,8 @@ export const generateTodaysPlan = async ({
   weight,
   goal,
   conditions,
-  remainingCalories
+  remainingCalories,
+  avoidFoods = []
 }) => {
 
   const prompt = `
@@ -28,19 +29,22 @@ IMPORTANT RULES (STRICT):
 - ❌ NO brackets
 - ❌ NO measurements
 - ❌ NO extra explanations
-- Examples of GOOD titles:
-  - "Oats and Banana"
-  - "Rice, Dal and Vegetables"
-  - "Bread and Tea"
-- Examples of BAD titles:
-  - "Oats Upma (1.5 cups)"
-  - "Vegetable Curry – 200g"
-  - "Chapati (2 pieces)"
 
 Health rules:
 - If diabetes is present → avoid sugar & refined carbs
 - Balance protein, fiber, and carbs
 - Use common Indian foods only
+
+${
+  avoidFoods.length
+    ? `
+Variety rule:
+- Avoid repeating these food items from recent days if possible:
+${avoidFoods.map(f => `- ${f}`).join("\n")}
+- Choose nutritionally equivalent alternatives instead
+`
+    : ""
+}
 
 Return ONLY valid JSON in this exact format:
 
@@ -58,3 +62,4 @@ ONLY JSON.
 
   return await callOpenRouterJSON(prompt);
 };
+
