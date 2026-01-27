@@ -13,6 +13,8 @@ import oats from "../assets/foods/oats.jpg";
 import paneer from "../assets/foods/paneer.jpg";
 import curd from "../assets/foods/curd.jpg";
 
+import './FoodGrid.css'
+
 const FoodGrid = () => {
   const foods = [
     { name: "Idli", image: idli },

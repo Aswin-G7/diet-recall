@@ -1,33 +1,95 @@
-/* Food Card */
+/* FoodCard.css */
+
 .food-card {
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 14px;
-  padding: 12px;
+  background: white;
+  border: 1px solid #f1f5f9;
+  border-radius: 20px;
+  padding: 10px;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  text-align: center;
-}
-
-/* Image Wrapper (controls size) */
-.food-image-wrapper {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  overflow: hidden; /* Clips the image zoom */
   width: 100%;
-  height: 120px;           /* FIXED HEIGHT */
-  border-radius: 10px;
-  overflow: hidden;        /* IMPORTANT */
-  margin-bottom: 10px;
 }
 
-/* Image */
+.food-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.1);
+  border-color: #10b981; /* Our Emerald brand color */
+}
+
+/* Image container with fixed ratio */
+.food-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 140px;
+  border-radius: 14px;
+  overflow: hidden;
+  background-color: #f8fafc;
+}
+
 .food-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;       /* MAGIC LINE */
+  object-fit: cover;
+  transition: transform 0.5s ease;
 }
 
-/* Food Name */
+/* Zoom Effect */
+.food-card:hover .food-image {
+  transform: scale(1.1);
+}
+
+/* Subtle overlay on hover */
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(16, 185, 129, 0.1); /* Emerald tint */
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+
+.food-card:hover .image-overlay {
+  opacity: 1;
+}
+
+.view-text {
+  color: white;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  backdrop-filter: blur(4px);
+}
+
+/* Text Section */
+.food-info {
+  padding: 12px 6px 6px 6px;
+  text-align: left;
+}
+
 .food-name {
-  font-size: 1rem;
+  display: block;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1e293b; /* Slate Blue */
+  margin-bottom: 0px;
+  margin-top: 7px;
+}
+
+.food-category {
+  font-size: 0.75rem;
+  color: #94a3b8;
   font-weight: 500;
-  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }

@@ -12,20 +12,6 @@
   text-align: center;
 }
 
-.food-section h2 {
-  font-size: 1.8rem;
-  margin-bottom: 30px;
-  color: #333;
-}
-
-/* Food Grid */
-.food-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 20px;
-  max-width: 900px;
-  margin: 0 auto;
-}
 
 /* Food Card */
 .food-card {

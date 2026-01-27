@@ -11,7 +11,7 @@ const FoodCard = ({ name, image }) => {
   };
 
   return (
-    <button className="food-card" onClick={handleClick}>
+    <button className="food-card" onClick={handleClick} aria-label={`View ${name}`}>
       <div className="food-image-wrapper">
         <img src={image} alt={name} className="food-image" />
       </div>

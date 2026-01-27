@@ -1,0 +1,29 @@
+/* Update your grid container to look like this */
+.food-section {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.food-section h2 {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+/* .food-grid {
+  display: grid;
+  Adjusts from 2 columns on mobile to 4 on desktop
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 24px;
+} */
+
+.food-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
