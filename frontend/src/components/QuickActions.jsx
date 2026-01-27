@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import insertIcon from "../assets/icons/icons8-insert-30.png"
 
 import "./QuickActions.css";
 import ChatButton from "./quick_actions/ChatButton";

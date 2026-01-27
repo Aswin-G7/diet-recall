@@ -1,28 +1,9 @@
 /* General */
 .home-container {
   min-height: 100vh;
-  background-color: transparent;
+  background-color: #ffffff6b;
   display: flex;
   flex-direction: column;
-}
-
-/* Welcome Section */
-.welcome-banner {
-  background: #f07fdb;
-  background: linear-gradient(93deg, rgba(240, 127, 219, 1) 0%, rgba(64, 194, 227, 1) 50%, rgba(169, 245, 140, 1) 100%);
-  color: black;
-  text-align: center;
-  
-}
-
-.welcome-banner h1 {
-  font-size: 2.2rem;
-  margin-bottom: 10px;
-  color: #4d54a6;
-}
-
-.welcome-banner p {
-  font-size: 1.1rem;
 }
 
 /* Food Section */
