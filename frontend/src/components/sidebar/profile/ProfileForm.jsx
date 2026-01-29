@@ -10,7 +10,7 @@ const ProfileForm = () => {
     dietType: "",
     goal: "",
     conditions: [],
-    dailyCalorieTarget: ""
+    dailyCalorieTarget: "",
   });
 
   const [error, setError] = useState("");
@@ -27,22 +27,59 @@ const ProfileForm = () => {
       ...prev,
       conditions: checked
         ? [...prev.conditions, value]
-        : prev.conditions.filter((c) => c !== value)
+        : prev.conditions.filter((c) => c !== value),
     }));
   };
 
-  const handleSubmit = (e) => {
+  const getOrCreateUserId = () => {
+    let userId = localStorage.getItem("userId");
+    if (!userId) {
+      userId = crypto.randomUUID();
+      localStorage.setItem("userId", userId);
+    }
+    return userId;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 🔴 Minimal required validation
     if (!profile.age || !profile.goal) {
       setError("Age and Goal are required to generate a diet plan.");
       return;
     }
 
     setError("");
-    console.log("Profile data:", profile);
-    // backend call comes next
+
+    const userId = getOrCreateUserId();
+
+    try {
+      const res = await fetch("http://localhost:5000/api/profile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-id": userId,
+        },
+        body: JSON.stringify(profile),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || "Failed to save profile");
+      }
+
+      const savedProfile = await res.json();
+
+      // ✅ Save merged profile + userId locally
+      localStorage.setItem(
+        "userProfile",
+        JSON.stringify({ ...savedProfile, userId }),
+      );
+
+      alert("Profile saved successfully!");
+    } catch (err) {
+      console.error(err);
+      setError(err.message);
+    }
   };
 
   return (

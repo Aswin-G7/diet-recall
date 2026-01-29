@@ -7,7 +7,8 @@ export const generateTodaysPlan = async ({
   goal,
   conditions,
   remainingCalories,
-  avoidFoods = []
+  avoidFoods = [],
+  dietType
 }) => {
 
   const prompt = `
@@ -18,6 +19,7 @@ User details:
 - Height: ${height ?? "not provided"}
 - Weight: ${weight ?? "not provided"}
 - Goal: ${goal}
+- Diet type: ${dietType || "not specified"}
 - Medical conditions: ${conditions?.join(", ") || "none"}
 - Remaining calories for today: ${remainingCalories}
 

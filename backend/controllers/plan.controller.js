@@ -10,49 +10,54 @@ export const getTodaysPlan = async (req, res) => {
       weight,
       goal,
       conditions = [],
-      dailyCalorieTarget = 1800
+      dailyCalorieTarget = 1800,
+      dietType
     } = req.body;
 
-    // 🔹 Required fields check
+    const userId = req.headers["x-user-id"];
+    if (!userId) {
+      return res.status(401).json({
+        message: "User not identified"
+      });
+    }
+
     if (!age || !goal) {
       return res.status(400).json({
         message: "age and goal are required"
       });
     }
 
-    // 🔹 Today's date key (YYYY-MM-DD)
     const todayKey = new Date().toISOString().split("T")[0];
 
-    // 🔹 1. FAST PATH → return cached plan if exists
-    const existingPlan = await DailyPlan.findOne({ date: todayKey }).lean();
+    // 🔹 1. FAST PATH (user-specific)
+    const existingPlan = await DailyPlan.findOne({
+      userId,
+      date: todayKey
+    }).lean();
+
     if (existingPlan?.plan) {
       return res.status(200).json(existingPlan.plan);
     }
 
-    // 🔹 2. Fetch last 3 previous plans (exclude today)
+    // 🔹 2. Last 3 plans (same user only)
     const previousPlans = await DailyPlan.find({
+      userId,
       date: { $ne: todayKey }
     })
       .sort({ date: -1 })
       .limit(3)
       .lean();
 
-    // 🔹 Extract recently used food titles
     const avoidFoodsSet = new Set();
-
     previousPlans.forEach(p => {
-      if (p.plan) {
-        Object.values(p.plan).forEach(meal => {
-          if (meal?.title) {
-            avoidFoodsSet.add(meal.title);
-          }
-        });
-      }
+      Object.values(p.plan || {}).forEach(meal => {
+        if (meal?.title) avoidFoodsSet.add(meal.title);
+      });
     });
 
     const avoidFoods = [...avoidFoodsSet];
 
-    // 🔹 3. Calculate today's consumed calories
+    // 🔹 3. Calories consumed today
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -70,7 +75,7 @@ export const getTodaysPlan = async (req, res) => {
       500
     );
 
-    // 🔹 4. Generate AI plan (with food avoidance)
+    // 🔹 4. Generate plan
     const plan = await generateTodaysPlan({
       age,
       height,
@@ -78,13 +83,14 @@ export const getTodaysPlan = async (req, res) => {
       goal,
       conditions,
       remainingCalories,
-      avoidFoods
+      avoidFoods,
+      dietType
     });
 
-    // 🔹 5. ATOMIC UPSERT → one plan per day guaranteed
+    // 🔹 5. Atomic upsert (user + date)
     const savedPlan = await DailyPlan.findOneAndUpdate(
-      { date: todayKey },
-      { $setOnInsert: { date: todayKey, plan } },
+      { userId, date: todayKey },
+      { $setOnInsert: { userId, date: todayKey, plan } },
       { new: true, upsert: true }
     );
 

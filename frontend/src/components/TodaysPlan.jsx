@@ -10,19 +10,30 @@ const TodaysPlan = () => {
   useEffect(() => {
     const fetchTodaysPlan = async () => {
       try {
+        const savedProfile = localStorage.getItem("userProfile");
+
+        if (!savedProfile) {
+          throw new Error("Profile not found");
+        }
+
+        const profile = JSON.parse(savedProfile);
+
+        const userId = localStorage.getItem("userId");
+
         const res = await fetch("http://localhost:5000/api/plan/today", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "x-user-id": userId
           },
           body: JSON.stringify({
-            age: 45,
-            height: 170,
-            weight: 72,
-            goal: "diabetes control",
-            conditions: ["diabetes"],
-            dailyCalorieTarget: 1800
-          })
+            age: profile.age,
+            height: profile.height || undefined,
+            weight: profile.weight || undefined,
+            goal: profile.goal,
+            conditions: profile.conditions || [],
+            dailyCalorieTarget: profile.dailyCalorieTarget || 1800,
+          }),
         });
 
         if (!res.ok) {
@@ -33,7 +44,7 @@ const TodaysPlan = () => {
         setPlan(data);
       } catch (err) {
         console.error(err);
-        setError("Unable to load today's plan");
+        setError("Please complete your profile to generate a plan.");
       } finally {
         setLoading(false);
       }

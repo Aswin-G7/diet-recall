@@ -7,6 +7,7 @@ import nutritionRoutes from "./routes/nutrition.routes.js";
 import chatRoutes from "./routes/chat.routes.js";
 import mealRoutes from "./routes/meal.routes.js";
 import planRoutes from "./routes/plan.routes.js";
+import profileRoutes from "./routes/profile.routes.js"
 
 dotenv.config();
 connectDB();
@@ -23,6 +24,9 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/meals", mealRoutes);
 
 app.use("/api/plan", planRoutes);
+
+app.use("/api/profile", profileRoutes);
+
 
 const PORT = process.env.PORT || 5000;
 
