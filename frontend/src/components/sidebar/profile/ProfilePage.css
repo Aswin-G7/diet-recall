@@ -1,11 +1,18 @@
 .profile-page {
-  max-width: 700px;
+  max-width: 800px;
   margin: auto;
   padding: 24px;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: #f8fafc;
+  min-height: 100vh;
 }
 
 .profile-title {
-  font-size: 26px;
-  font-weight: 600;
-  margin-bottom: 20px;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 30px;
+  letter-spacing: -0.025em;
 }
+
+

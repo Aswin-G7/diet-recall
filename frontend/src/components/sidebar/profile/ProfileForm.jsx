@@ -87,95 +87,99 @@ const ProfileForm = () => {
       <h3>Edit Profile</h3>
 
       {error && <p className="error-text">{error}</p>}
+      <div className="form-grid">
+        <label>
+          Name (optional)
+          <input
+            type="text"
+            name="name"
+            value={profile.name}
+            onChange={handleChange}
+          />
+        </label>
 
-      <label>
-        Name (optional)
-        <input
-          type="text"
-          name="name"
-          value={profile.name}
-          onChange={handleChange}
-        />
-      </label>
+        <label>
+          Age *
+          <input
+            type="number"
+            name="age"
+            value={profile.age}
+            onChange={handleChange}
+          />
+        </label>
 
-      <label>
-        Age *
-        <input
-          type="number"
-          name="age"
-          value={profile.age}
-          onChange={handleChange}
-        />
-      </label>
+        <label>
+          Height (cm) (optional)
+          <input
+            type="number"
+            name="height"
+            value={profile.height}
+            onChange={handleChange}
+          />
+        </label>
 
-      <label>
-        Height (cm) (optional)
-        <input
-          type="number"
-          name="height"
-          value={profile.height}
-          onChange={handleChange}
-        />
-      </label>
+        <label>
+          Weight (kg) (optional)
+          <input
+            type="number"
+            name="weight"
+            value={profile.weight}
+            onChange={handleChange}
+          />
+        </label>
 
-      <label>
-        Weight (kg) (optional)
-        <input
-          type="number"
-          name="weight"
-          value={profile.weight}
-          onChange={handleChange}
-        />
-      </label>
+        <label>
+          Diet Type (optional)
+          <select
+            name="dietType"
+            value={profile.dietType}
+            onChange={handleChange}
+          >
+            <option value="">Select</option>
+            <option value="veg">Vegetarian</option>
+            <option value="non-veg">Non-Vegetarian</option>
+          </select>
+        </label>
 
-      <label>
-        Diet Type (optional)
-        <select
-          name="dietType"
-          value={profile.dietType}
-          onChange={handleChange}
-        >
-          <option value="">Select</option>
-          <option value="veg">Vegetarian</option>
-          <option value="non-veg">Non-Vegetarian</option>
-        </select>
-      </label>
+        <label>
+          Goal *
+          <select name="goal" value={profile.goal} onChange={handleChange}>
+            <option value="">Select goal</option>
+            <option value="lose">Lose Weight</option>
+            <option value="maintain">Maintain Weight</option>
+            <option value="gain">Gain Weight</option>
+          </select>
+        </label>
 
-      <label>
-        Goal *
-        <select name="goal" value={profile.goal} onChange={handleChange}>
-          <option value="">Select goal</option>
-          <option value="lose">Lose Weight</option>
-          <option value="maintain">Maintain Weight</option>
-          <option value="gain">Gain Weight</option>
-        </select>
-      </label>
+      </div>
 
       <div className="conditions">
         <p>Health Conditions (optional)</p>
+        <div  className="checkbox-group">
+          <label>
+            <input
+              type="checkbox"
+              value="diabetes"
+              onChange={handleConditionChange}
+            />
+            Diabetes
+          </label>
 
-        <label>
-          <input
-            type="checkbox"
-            value="diabetes"
-            onChange={handleConditionChange}
-          />
-          Diabetes
-        </label>
+          <label>
+            <input type="checkbox" value="bp" onChange={handleConditionChange} />
+            BP
+          </label>
 
-        <label>
-          <input type="checkbox" value="bp" onChange={handleConditionChange} />
-          BP
-        </label>
+          <label>
+            <input
+              type="checkbox"
+              value="thyroid"
+              onChange={handleConditionChange}
+            />
+            Thyroid
+          </label>
 
-        <label>
-          <input
-            type="checkbox"
-            value="thyroid"
-            onChange={handleConditionChange}
-          />
-          Thyroid
-        </label>
+        </div>
       </div>
 
       <label>

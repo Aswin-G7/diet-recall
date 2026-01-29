@@ -8,9 +8,11 @@ const ProfileCard = () => {
 
       <div className="profile-info">
         <h2>Aswin</h2>
-        <p>Age: 22</p>
-        <p>Weight: 68 kg</p>
-        <p>Diet Type: Vegetarian</p>
+        <div className="profile-stats">
+          <p>Age: 22</p>
+          <p>Weight: 68 kg</p>
+          <p>Diet: Vegetarian</p>
+        </div>
       </div>
     </div>
   );

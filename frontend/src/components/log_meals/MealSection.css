@@ -1,168 +1,172 @@
-/* Meal Card */
+/* MealSection.css */
+
 .meal-card {
-  background-color: #ffffff;
-  border-radius: 14px;
-  padding: 18px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 30px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid #f1f5f9;
+  transition: transform 0.2s ease;
 }
 
-/* Meal Heading */
 .meal-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 12px;
-  color: #333;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  text-transform: capitalize;
 }
 
-/* Inputs */
+/* Grouping Input and Buttons */
+.meal-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .meal-input {
-  width: 90%;
-  padding: 10px 12px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 0.95rem;
-  transition: border-color 0.2s ease;
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
 }
 
 .meal-input:focus {
   outline: none;
-  border-color: #2e7d32;
+  border-color: #10b981;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
 }
 
-/* Normal button */
+/* Button Container */
+.button-container {
+  display: flex;
+  gap: 10px;
+}
+
 .meal-button {
-  width: 30%;
-  background-color: #2e7d32;
-  color: #ffffff;
-  border: none;
-  padding: 10px 0;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 500;
-  margin-top: 6px;
-  cursor: pointer;
-  opacity: 1;
-  transition: opacity 0.2s ease;
-}
-
-/* Disabled button */
-.meal-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-
-/* Placeholder Text */
-.meal-placeholder {
-  margin-top: 10px;
-  font-size: 0.85rem;
-  color: #777;
-  font-style: italic;
-}
-
-/* ================================
-   Nutrition Table Wrapper
-================================ */
-.nutrition-table-wrapper {
-  margin-top: 16px;
-  width: 100%;
-  overflow-x: auto;
+  flex: 1;
+  padding: 12px 20px;
   border-radius: 10px;
-  background: #ffffff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* ================================
-   Nutrition Table
-================================ */
+/* Primary Action */
+.meal-button:not(.secondary) {
+  background-color: #10b981;
+  color: white;
+}
+
+.meal-button:not(.secondary):hover:not(:disabled) {
+  background-color: #059669;
+  transform: translateY(-1px);
+}
+
+/* Secondary Action */
+.meal-button.secondary {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.meal-button.secondary:hover:not(:disabled) {
+  background-color: #e2e8f0;
+  color: #1e293b;
+}
+
+.meal-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(1);
+}
+
+/* Messages */
+.error, .success {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.error {
+  background-color: #fef2f2;
+  color: #b91c1c;
+  border-left: 4px solid #ef4444;
+}
+
+.success {
+  background-color: #f0fdf4;
+  color: #15803d;
+  border-left: 4px solid #22c55e;
+}
+
+/* Nutrition Table Styling */
+.nutrition-table-wrapper {
+  margin-top: 24px;
+  overflow-x: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
 .nutrition-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 900px; /* allows horizontal scroll */
-  font-size: 0.95rem;
-}
-
-/* ================================
-   Table Header
-================================ */
-.nutrition-table thead th {
-  position: sticky;
-  top: 0;
-  background-color: #2e7d32;
-  color: #ffffff;
-  padding: 12px 10px;
   text-align: left;
+  font-size: 0.875rem;
+}
+
+.nutrition-table th {
+  background-color: #f8fafc;
+  color: #64748b;
   font-weight: 600;
-  white-space: nowrap;
-  z-index: 2;
+  padding: 12px;
+  border-bottom: 1px solid #e2e8f0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.75rem;
 }
 
-/* ================================
-   Table Body
-================================ */
-.nutrition-table tbody td {
-  padding: 10px;
-  border-bottom: 1px solid #e0e0e0;
-  color: #333333;
-  white-space: nowrap;
+.nutrition-table td {
+  padding: 12px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
 }
 
-/* Zebra striping */
-.nutrition-table tbody tr:nth-child(even) {
-  background-color: #f9f9f9;
+.nutrition-table tr:last-child td {
+  border-bottom: none;
 }
 
-/* Hover effect */
-.nutrition-table tbody tr:hover {
-  background-color: #e8f5e9;
+.nutrition-table tr:hover td {
+  background-color: #f8fafc;
 }
 
-/* ================================
-   First Column (Food Name)
-================================ */
-.nutrition-table tbody td:first-child {
-  font-weight: 600;
-  color: #1b5e20;
+/* Highlight the food name */
+.nutrition-table td:first-child {
+  font-weight: 700;
+  color: #1e293b;
+  position: sticky;
+  left: 0;
+  background: white;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.02);
 }
 
-/* ================================
-   Scrollbar Styling
-================================ */
+/* Custom Scrollbar */
 .nutrition-table-wrapper::-webkit-scrollbar {
-  height: 8px;
+  height: 6px;
 }
-
-.nutrition-table-wrapper::-webkit-scrollbar-track {
-  background: #eeeeee;
-  border-radius: 4px;
-}
-
 .nutrition-table-wrapper::-webkit-scrollbar-thumb {
-  background: #2e7d32;
-  border-radius: 4px;
-}
-
-/* ================================
-   Mobile Optimization
-================================ */
-@media (max-width: 768px) {
-  .nutrition-table {
-    font-size: 0.85rem;
-  }
-
-  .nutrition-table thead th,
-  .nutrition-table tbody td {
-    padding: 8px;
-  }
-}
-
-/* ================================
-   Error Text
-================================ */
-.error {
-  margin-top: 10px;
-  color: #d32f2f;
-  font-size: 0.9rem;
+  background: #cbd5e1;
+  border-radius: 10px;
 }

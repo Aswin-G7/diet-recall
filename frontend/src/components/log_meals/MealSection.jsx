@@ -98,37 +98,39 @@ const MealSection = ({ title, placeholder, mealType }) => {
     <div className="meal-card">
       <h2 className="meal-title">{title}</h2>
 
-      <input
-        type="text"
-        className="meal-input"
-        placeholder={placeholder}
-        value={query}
-        onChange={(e) => {
-          setQuery(e.target.value);
-          setHasFetched(false);
-          setHasRegistered(false);
-          setSuccess("");
-          setNutritionData([]);
-        }}
-      />
+      <div className="meal-input-group">
+        <input
+          type="text"
+          className="meal-input"
+          placeholder={placeholder}
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setHasFetched(false);
+            setHasRegistered(false);
+            setSuccess("");
+            setNutritionData([]);
+          }}
+        />
 
-      {/* GET NUTRITION */}
-      <button
-        className="meal-button"
-        onClick={fetchNutrition}
-        disabled={loading || !query.trim() || hasFetched}
-      >
-        {loading ? "Fetching..." : "Get Nutrition"}
-      </button>
+        <div className="button-container">
+          <button
+            className="meal-button"
+            onClick={fetchNutrition}
+            disabled={loading || !query.trim() || hasFetched}
+          >
+            {loading ? "Fetching..." : "Get Nutrition"}
+          </button>
 
-      {/* REGISTER MEAL */}
-      <button
-        className="meal-button secondary"
-        onClick={registerMeal}
-        disabled={registering || !query.trim() || hasRegistered}
-      >
-        {registering ? "Registering..." : "Register Meal"}
-      </button>
+          <button
+            className="meal-button secondary"
+            onClick={registerMeal}
+            disabled={registering || !query.trim() || hasRegistered}
+          >
+            {registering ? "Registering..." : "Register Meal"}
+          </button>
+        </div>
+      </div>
 
       {error && <p className="error">{error}</p>}
       {success && <p className="success">{success}</p>}
@@ -140,33 +142,24 @@ const MealSection = ({ title, placeholder, mealType }) => {
               <tr>
                 <th>Food</th>
                 <th>Calories</th>
-                <th>Serving (g)</th>
-                <th>Protein (g)</th>
-                <th>Fat (g)</th>
-                <th>Sat. Fat (g)</th>
-                <th>Carbs (g)</th>
-                <th>Fiber (g)</th>
-                <th>Sugar (g)</th>
-                <th>Sodium (mg)</th>
-                <th>Potassium (mg)</th>
-                <th>Cholesterol (mg)</th>
+                <th>Protein</th>
+                <th>Carbs</th>
+                <th>Fat</th>
+                <th>Fiber</th>
+                <th>Sugar</th>
+                {/* Shortened headers for better fit, keep full data in cells */}
               </tr>
             </thead>
             <tbody>
               {nutritionData.map((item, index) => (
                 <tr key={index}>
                   <td>{item.name}</td>
-                  <td>{item.calories ?? "-"}</td>
-                  <td>{item.serving_size_g ?? "-"}</td>
-                  <td>{item.protein_g ?? "-"}</td>
-                  <td>{item.fat_total_g ?? "-"}</td>
-                  <td>{item.fat_saturated_g ?? "-"}</td>
-                  <td>{item.carbohydrates_total_g ?? "-"}</td>
-                  <td>{item.fiber_g ?? "-"}</td>
-                  <td>{item.sugar_g ?? "-"}</td>
-                  <td>{item.sodium_mg ?? "-"}</td>
-                  <td>{item.potassium_mg ?? "-"}</td>
-                  <td>{item.cholesterol_mg ?? "-"}</td>
+                  <td>{item.calories ?? "-"} kcal</td>
+                  <td>{item.protein_g ?? "-"}g</td>
+                  <td>{item.carbohydrates_total_g ?? "-"}g</td>
+                  <td>{item.fat_total_g ?? "-"}g</td>
+                  <td>{item.fiber_g ?? "-"}g</td>
+                  <td>{item.sugar_g ?? "-"}g</td>
                 </tr>
               ))}
             </tbody>
