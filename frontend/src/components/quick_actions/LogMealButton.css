@@ -10,7 +10,7 @@
   border: 1px solid #ccc; /* Subtle border */
   width: var(--plus_sideLength);
   height: var(--plus_sideLength);
-  background-color: #000000;
+  background-color: #059669;
   overflow: hidden;
   padding: 0;
   cursor: pointer;

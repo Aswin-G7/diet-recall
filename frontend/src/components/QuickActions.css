@@ -3,17 +3,19 @@
   background: #A3BAD4;
 background: linear-gradient(317deg, rgba(163, 186, 212, 1) 0%, rgba(174, 235, 204, 1) 54%, rgba(169, 179, 214, 1) 100%);
   border: 1px solid #e0e0e0;
-  border-radius: 16px;
-  padding: 15px;
-  max-width: 900px;
-  margin: 30px auto;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  border-radius: 28px;
+  padding: 30px 20px;
+  max-width: 800px;
+  margin: 40px auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
 }
 
 /* Title */
 .quick-actions-title {
   text-align: center;
   font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
   margin-bottom: 15px;
   margin-top: 0px;
   color: #333;
@@ -32,6 +34,7 @@ background: linear-gradient(317deg, rgba(163, 186, 212, 1) 0%, rgba(174, 235, 20
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: transform 0.2s ease;
 }
 
 /* Circular Button */
@@ -73,4 +76,13 @@ background: linear-gradient(317deg, rgba(163, 186, 212, 1) 0%, rgba(174, 235, 20
   font-weight: 500;
   color: #333;
   text-align: center;
+}
+
+.diary-btn {
+  background-color: #f5f3ff !important; /* Soft Purple */
+  font-size: 1.5rem;
+}
+.diary-btn:hover {
+  background-color: #ede9fe !important;
+  box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.2) !important;
 }

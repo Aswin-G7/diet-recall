@@ -1,7 +1,7 @@
 .progress-btn-container {
   width: 50px;
   height: 50px;
-  background-color: #f0f0f0; /* Light grey bg to make bars pop */
+  background-color: #ecfdf5; /* Light grey bg to make bars pop */
   border: none;
   border-radius: 12px;
   display: flex;
@@ -13,12 +13,13 @@
 }
 
 .progress-btn-container:hover {
-  background-color: #e2e2e2;
+  background-color: #d1fae5;
+  box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.2) !important;
 }
 
 .bar-wrapper {
   position: relative;
-  width: 35px; /* Scaled down for the button */
+  width: 28px; /* Scaled down for the button */
   height: 30px;
   display: flex;
   align-items: flex-end;
@@ -26,13 +27,14 @@
 }
 
 .progress-bar {
-  width: 5px;
+  width: 4px;
   height: 100%;
-  background: #000;
+  background: #10b981;
   transform-origin: bottom;
   box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
   /* Animation is paused by default */
-  animation-play-state: paused; 
+  animation-play-state: paused;
+  border-radius: 2px; 
 }
 
 /* Individual Bar Scales & Animation assignments */

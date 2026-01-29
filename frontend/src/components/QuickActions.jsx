@@ -38,7 +38,7 @@ const QuickActions = () => {
         {/* Food Diary */}
         <div className="quick-action-item">
           <button
-            className="quick-action-button"
+            className="quick-action-button diary-btn"
             onClick={() => navigate("/food-diary")}
           >
             <span className="quick-action-icon">📓</span>
