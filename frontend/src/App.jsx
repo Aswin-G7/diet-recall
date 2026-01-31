@@ -15,6 +15,8 @@ function App() {
   return (
     <BrowserRouter>
       <div className="app">
+      <div className="min-h-screen flex flex-col">
+
         <Routes>
           <Route element={<SidebarLayout />}>
             {/* Home Page */}
@@ -34,6 +36,7 @@ function App() {
             <Route path="/profile" element={<ProfilePage />} />
           </Route>
         </Routes>
+      </div>
       </div>
     </BrowserRouter>
   );

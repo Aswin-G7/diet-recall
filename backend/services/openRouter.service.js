@@ -38,7 +38,7 @@ export const callOpenRouterJSON = async (prompt, temperature = 0.3) => {
     const response = await axios.post(
       "https://openrouter.ai/api/v1/chat/completions",
       {
-        model: "google/gemma-3-27b-it:free",
+        model: "z-ai/glm-4.5-air:free",
         messages: [{ role: "user", content: prompt }],
         temperature
       },
