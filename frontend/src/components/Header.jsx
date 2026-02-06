@@ -1,28 +1,41 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Activity, LayoutDashboard, Utensils, Calendar, MessageCircle } from 'lucide-react';
+import { Activity, LayoutDashboard, Utensils, Calendar, MessageCircle, Menu, X } from 'lucide-react';
 
-const Header = () => {
+const Header = ({ onMenuClick, isSidebarOpen }) => {
   const location = useLocation();
 
   const navLinks = [
     { to: '/', label: 'Home', icon: LayoutDashboard },
     { to: '/progress', label: 'Progress', icon: Activity },
-    { to: '/diary', label: 'Diary', icon: Calendar },
-    { to: '/chat', label: 'Coach', icon: MessageCircle },
+    { to: '/food-diary', label: 'Diary', icon: Calendar },
+    { to: '/nutri-chat', label: 'Coach', icon: MessageCircle },
   ];
 
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 px-4 py-3 sm:px-8">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 group">
-          <div className="bg-emerald-500 p-2 rounded-xl group-hover:rotate-12 transition-transform duration-300">
-            <Activity className="w-6 h-6 text-white" />
-          </div>
-          <span className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-            NutriTrack
-          </span>
-        </Link>
+        
+        <div className="flex items-center gap-4">
+          
+          {/* --- UPDATED: Removed 'lg:hidden' so it shows on Desktop --- */}
+          <button 
+            onClick={onMenuClick}
+            className="p-2 -ml-2 text-slate-500 hover:bg-slate-100 rounded-xl" 
+          >
+            {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+          {/* ----------------------------------------------------------- */}
+
+          <Link to="/" className="flex items-center gap-2 group">
+            <div className="bg-emerald-500 p-2 rounded-xl group-hover:rotate-12 transition-transform duration-300">
+              <Activity className="w-6 h-6 text-white" />
+            </div>
+            <span className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+              NutriTrack
+            </span>
+          </Link>
+        </div>
 
         <nav className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => {

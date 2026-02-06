@@ -1,6 +1,10 @@
+import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import SidebarLayout from "./components/layout/SidebarLayout";
 
+// Components
+import Sidebar from "./components/Sidebar"; 
+import Header from "./components/Header";
+import BottomNav from "./components/BottomNav";
 import HomePage from "./components/HomePage";
 import FoodDetails from "./components/FoodDetails";
 import LogMeal from "./components/log_meals/LogMeal";
@@ -9,34 +13,48 @@ import MyProgress from "./components/progress/MyProgress";
 import FoodDiaryPage from "./components/food_diary/FoodDiaryPage";
 import ProfilePage from "./components/sidebar/profile/ProfilePage";
 
-import "./App.css";
+import "./App.css"; // Ensures your .app CSS is loaded
 
 function App() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+
   return (
     <BrowserRouter>
-      <div className="app">
-      <div className="min-h-screen flex flex-col">
+      {/* FIXED: Restored 'app' class so your CSS gradient works.
+         Added 'relative' so the Sidebar can position itself correctly within this context.
+      */}
+      <div className="app relative">
 
-        <Routes>
-          <Route element={<SidebarLayout />}>
-            {/* Home Page */}
-            <Route path="/" element={<HomePage />} />
+        <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)}/>
+        
+        {/* Content Wrapper */}
+        <div className="w-full">
+          
+          {/* Header 
+             - Added backdrop-blur-md so the gradient shows through slightly but text remains readable.
+          */}
+          <div className="sticky top-0 z-30 bg-white/60 backdrop-blur-md border-b border-white/20">
+             <Header onMenuClick={toggleSidebar} isSidebarOpen={isSidebarOpen} />
+          </div>
 
-            {/* Food Details Page */}
-            <Route path="/food/:foodName" element={<FoodDetails />} />
+          <main className="pb-24 lg:pb-8 px-4 pt-0 lg:px-8 lg:pt-3 max-w-7xl mx-auto">
+            <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/food/:foodName" element={<FoodDetails />} />
+                <Route path="/log-meal" element={<LogMeal />} />
+                <Route path="/nutri-chat" element={<NutriChat />} />
+                <Route path="/progress" element={<MyProgress />} />
+                <Route path="/food-diary" element={<FoodDiaryPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+            </Routes>
+          </main>
 
-            <Route path="/log-meal" element={<LogMeal />} />
+        </div>
 
-            <Route path="/nutri-chat" element={<NutriChat />} />
-
-            <Route path="/progress" element={<MyProgress />} />
-
-            <Route path="/food-diary" element={<FoodDiaryPage />} />
-
-            <Route path="/profile" element={<ProfilePage />} />
-          </Route>
-        </Routes>
-      </div>
+        <BottomNav />
+        
       </div>
     </BrowserRouter>
   );

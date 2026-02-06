@@ -13,9 +13,7 @@ import HeroSection from './HeroSection'
 const HomePage = () => {
   return (
     <div className='home-container'>
-      <Header />
       <HeroSection />
-      <Sidebar />
       <QuickActions />
       <TodaysPlan />
       <FoodGrid />
