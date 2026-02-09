@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, Activity, Calendar, MessageCircle, 
-  PlusCircle, Settings, BookMarked, HelpCircle, LogOut, X
+  PlusCircle, Settings, BookMarked, HelpCircle, LogOut, X,
+  User // --- IMPORTED USER ICON ---
 } from 'lucide-react';
 
 const Sidebar = ({ isOpen, onClose }) => {
@@ -23,14 +24,12 @@ const Sidebar = ({ isOpen, onClose }) => {
     { to: '/diary', label: 'Food Diary', icon: Calendar },
     { to: '/chat', label: 'AI Coach', icon: MessageCircle },
     { to: '/recipes', label: 'Recipes', icon: BookMarked },
+    // --- ADDED PROFILE LINK HERE ---
+    { to: '/profile', label: 'My Profile', icon: User },
   ];
 
   return (
     <>
-      {/* OVERLAY: 
-         - Removed 'lg:hidden' so this dark background shows on Desktop too.
-         - This effectively blocks the user from clicking content while sidebar is open.
-      */}
       {isOpen && (
         <div 
           className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40"
@@ -38,11 +37,6 @@ const Sidebar = ({ isOpen, onClose }) => {
         />
       )}
 
-      {/* SIDEBAR:
-         - Removed 'lg:static' (so it floats on top instead of pushing content).
-         - Removed 'lg:translate-x-0' (so it stays hidden until toggled).
-         - Kept 'fixed' so it stays on top of everything.
-      */}
       <aside 
         className={`fixed top-0 left-0 z-50 h-screen bg-white border-r border-slate-100 w-64 shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col overflow-y-auto no-scrollbar overscroll-contain ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
@@ -58,7 +52,6 @@ const Sidebar = ({ isOpen, onClose }) => {
             </span>
           </Link>
           
-          {/* Close Button: Visible on ALL screens now */}
           <button 
             onClick={onClose}
             className="p-2 hover:bg-slate-100 rounded-xl text-slate-400"

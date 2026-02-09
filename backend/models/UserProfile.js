@@ -25,12 +25,13 @@ const userProfileSchema = new mongoose.Schema(
     goal: {
       type: String,
       required: true,
+      enum: ["lose", "maintain", "gain"]
     },
 
     dietType: {
       type: String,
-      enum: ["veg", "non-veg"], // optional, keeps values consistent
-      default: "",
+      enum: ["Balanced", "Vegan", "Vegetarian", "non-veg", "Keto", "Paleo", "Low Carb", "veg"],
+      default: "Balanced",
     },
 
     conditions: {

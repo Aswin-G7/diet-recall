@@ -17,15 +17,12 @@ const Header = ({ onMenuClick, isSidebarOpen }) => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         
         <div className="flex items-center gap-4">
-          
-          {/* --- UPDATED: Removed 'lg:hidden' so it shows on Desktop --- */}
           <button 
             onClick={onMenuClick}
             className="p-2 -ml-2 text-slate-500 hover:bg-slate-100 rounded-xl" 
           >
             {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
-          {/* ----------------------------------------------------------- */}
 
           <Link to="/" className="flex items-center gap-2 group">
             <div className="bg-emerald-500 p-2 rounded-xl group-hover:rotate-12 transition-transform duration-300">
@@ -60,9 +57,16 @@ const Header = ({ onMenuClick, isSidebarOpen }) => {
           <button className="p-2 text-slate-500 hover:bg-slate-50 rounded-full md:hidden">
             <Utensils className="w-6 h-6" />
           </button>
-          <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold border-2 border-white shadow-sm">
+          
+          {/* --- UPDATED: Changed div to Link and added hover effect --- */}
+          <Link 
+            to="/profile"
+            className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold border-2 border-white shadow-sm hover:scale-105 transition-transform"
+          >
             JD
-          </div>
+          </Link>
+          {/* ---------------------------------------------------------- */}
+          
         </div>
       </div>
     </header>
