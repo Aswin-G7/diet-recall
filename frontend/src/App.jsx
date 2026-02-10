@@ -13,6 +13,7 @@ import NutriChat from "./components/nutri_chat/NutriChat";
 import MyProgress from "./components/progress/MyProgress";
 import FoodDiaryPage from "./components/food_diary/FoodDiaryPage";
 import ProfilePage from "./components/profile/ProfilePage";
+import FoodScanner from "./components/FoodScanner";
 
 import "./App.css"; // Ensures your .app CSS is loaded
 
@@ -52,6 +53,7 @@ function App() {
                   <Route path="/progress" element={<MyProgress />} />
                   <Route path="/food-diary" element={<FoodDiaryPage />} />
                   <Route path="/profile" element={<ProfilePage />} />
+                  <Route path="/scan" element={<FoodScanner />} />
               </Routes>
             </main>
 
