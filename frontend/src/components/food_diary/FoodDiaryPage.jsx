@@ -9,7 +9,6 @@ const FoodDiaryPage = () => {
 
   return (
     <div className="food-diary-page">
-      <h1 className="food-diary-title">Food Diary</h1>
 
       <DiaryDateHeader
         selectedDate={selectedDate}

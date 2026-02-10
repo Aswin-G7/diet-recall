@@ -16,6 +16,7 @@ import ProfilePage from "./components/profile/ProfilePage";
 import FoodScanner from "./components/FoodScanner";
 
 import "./App.css"; // Ensures your .app CSS is loaded
+import Settings from "./components/Settings";
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -54,6 +55,7 @@ function App() {
                   <Route path="/food-diary" element={<FoodDiaryPage />} />
                   <Route path="/profile" element={<ProfilePage />} />
                   <Route path="/scan" element={<FoodScanner />} />
+                  <Route path="/settings" element={<Settings />} />
               </Routes>
             </main>
 

@@ -93,10 +93,15 @@ const Sidebar = ({ isOpen, onClose }) => {
           </Link>
 
           <div className="pt-4 border-t border-slate-100 space-y-1">
-             <button className="flex items-center gap-3 px-4 py-3 w-full rounded-2xl text-sm font-semibold text-slate-500 hover:bg-slate-50 transition-all">
+            <Link
+              to="/settings"
+              onClick={onClose}
+              className='flex items-center gap-3 px-4 py-3 w-full rounded-2xl text-sm font-semibold text-slate-500 hover:bg-slate-50 transition-all'
+              >
               <Settings size={20} className="text-slate-400" />
               Settings
-            </button>
+            </Link>
+             
             <button className="flex items-center gap-3 px-4 py-3 w-full rounded-2xl text-sm font-semibold text-rose-500 hover:bg-rose-50 transition-all">
               <LogOut size={20} className="text-rose-400" />
               Logout
