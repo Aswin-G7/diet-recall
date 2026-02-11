@@ -1,17 +1,21 @@
 import { Link } from 'react-router-dom';
 import { Sparkles, Camera } from 'lucide-react';
-import "./LogMeal.css";
 import MealSection from "./MealSection";
+// You can remove import "./LogMeal.css" if you are no longer using it for other things!
 
 const LogMeal = () => {
   return (
-    <div className="log-meal-page space-y-8">
+    // 1. Replaced 'log-meal-page' with a proper Tailwind container
+    // Added pb-24 so the BottomNav doesn't cover the Dinner section
+    <div className="max-w-4xl mx-auto px-4 py-8 sm:px-8 space-y-8 pb-24">
       
-      <div className="flex items-center justify-between">
-        <h1 className="log-meal-title">Log Your Meals</h1>
+      {/* 2. Replaced 'log-meal-title' with Tailwind typography */}
+      <div className="flex flex-col gap-1">
+        <h1 className="text-3xl font-black text-slate-800">Log Your Meals</h1>
+        <p className="text-slate-500 font-medium">Track your daily nutrition and hit your goals.</p>
       </div>
 
-      {/* --- ADDED: AI Scan CTA Component --- */}
+      {/* --- AI Scan CTA Component --- */}
       <Link to="/scan" className="group block relative bg-gradient-to-r from-emerald-600 to-teal-600 p-8 rounded-[2.5rem] text-white overflow-hidden shadow-xl shadow-emerald-500/20 hover:scale-[1.01] transition-transform active:scale-[0.99]">
         <div className="relative z-10 flex items-center justify-between">
            <div className="space-y-2">
@@ -29,7 +33,11 @@ const LogMeal = () => {
       </Link>
       {/* ------------------------------------ */}
 
-      <div className="space-y-6">
+      {/* 3. Added a subtle backdrop to group the meal sections nicely */}
+      <div className="space-y-6 relative">
+        {/* Optional: Subtle connecting line behind the cards to make it look like a timeline */}
+        <div className="absolute left-8 top-10 bottom-10 w-0.5 bg-slate-100 -z-10 hidden md:block"></div>
+
         <MealSection
           title="Breakfast"
           mealType="breakfast"

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import PlanCard from "./PlanCard";
 import { Sparkles, Clock, Flame } from "lucide-react";
 
 const TodaysPlan = () => {
@@ -10,30 +9,46 @@ const TodaysPlan = () => {
   useEffect(() => {
     const fetchTodaysPlan = async () => {
       try {
-        // 1. Get raw data from Local Storage
-        const savedProfile = localStorage.getItem("userProfile"); // Make sure this matches your AppContext key
-        if (!savedProfile) throw new Error("Profile not found");
-        
-        const profile = JSON.parse(savedProfile);
         const userId = localStorage.getItem("userId");
+        if (!userId) throw new Error("Please log in to see your plan.");
 
-        // 2. DATA TRANSFORMATION (The Fix) -------------------------
-        
-        // Convert "healthConditions" (Object) -> "conditions" (Array)
+        // 1. Try to get profile from Local Storage
+        let profile = null;
+        const savedProfile = localStorage.getItem("userProfile");
+
+        if (savedProfile && savedProfile !== "undefined") {
+          profile = JSON.parse(savedProfile);
+        } else {
+          // 2. FALLBACK: Fetch from MongoDB if Local Storage is empty
+          console.log("Local storage empty, fetching profile from DB...");
+          const profileRes = await fetch("http://localhost:5000/api/profile", {
+            method: "GET",
+            headers: {
+              "x-user-id": userId, // Sending the userId to find the right profile
+            },
+          });
+
+          if (!profileRes.ok) {
+             throw new Error("Please complete your profile settings first.");
+          }
+          
+          profile = await profileRes.json();
+          
+          // Save it back to local storage so we don't have to fetch it every time
+          localStorage.setItem("userProfile", JSON.stringify(profile));
+        }
+
+        // 3. DATA TRANSFORMATION
         let conditionsToSend = [];
         if (profile.healthConditions) {
-           // New UI format
-           conditionsToSend = Object.keys(profile.healthConditions)
-             .filter(key => profile.healthConditions[key]);
+           conditionsToSend = Object.keys(profile.healthConditions).filter(key => profile.healthConditions[key]);
         } else if (Array.isArray(profile.conditions)) {
-           // Old UI format fallback
            conditionsToSend = profile.conditions;
         }
 
-        // Ensure dietType exists
         const dietTypeToSend = profile.dietType || "Balanced";
-        // -----------------------------------------------------------
 
+        // 4. GENERATE PLAN
         const res = await fetch("http://localhost:5000/api/plan/today", {
           method: "POST",
           headers: {
@@ -46,17 +61,12 @@ const TodaysPlan = () => {
             weight: profile.weight || undefined,
             goal: profile.goal,
             dailyCalorieTarget: profile.dailyCalorieTarget || 1800,
-            
-            // Fixed: Send the transformed array
             conditions: conditionsToSend, 
-            
-            // Fixed: Added dietType (Critical for AI)
             dietType: dietTypeToSend, 
           }),
         });
 
         if (!res.ok) {
-           // Try to get the error message from the server if possible
            const errData = await res.json().catch(() => ({}));
            throw new Error(errData.message || "Failed to fetch plan");
         }
@@ -65,7 +75,7 @@ const TodaysPlan = () => {
         setPlan(data);
       } catch (err) {
         console.error("Plan Fetch Error:", err);
-        setError("Please save your profile settings first to generate a plan.");
+        setError(err.message || "Please save your profile settings first to generate a plan.");
       } finally {
         setLoading(false);
       }
@@ -90,7 +100,6 @@ const TodaysPlan = () => {
     );
   }
 
-  // Handle case where plan is null but no error (rare edge case)
   if (!plan) return null;
 
   return (
@@ -116,7 +125,6 @@ const TodaysPlan = () => {
               </div>
               
               <h3 className="font-bold text-slate-800 mb-2 leading-tight group-hover:text-emerald-700 transition-colors">
-               {/* Added Optional Chaining just in case data is partial */}
                {plan[mealType]?.title || "Not planned"}
               </h3>
 

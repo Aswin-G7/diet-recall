@@ -1,40 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Clock, Trash2, Utensils, Zap } from "lucide-react";
 
-const MEAL_TYPES = ["breakfast", "lunch", "snack", "dinner"];
+// Note: No need for isSameDay here anymore!
 
-const isSameDay = (d1, d2) => {
-  return (
-    d1.getFullYear() === d2.getFullYear() &&
-    d1.getMonth() === d2.getMonth() &&
-    d1.getDate() === d2.getDate()
-  );
-};
-
-const DiaryMeals = ({ selectedDate }) => {
-  const [meals, setMeals] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchDiaryMeals = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/api/meals/diary");
-        const data = await res.json();
-        setMeals(data);
-      } catch (err) {
-        console.error("Failed to load diary meals", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchDiaryMeals();
-  }, []);
-
-  // Filter meals for the selected date
-  const filteredMeals = meals
-    .filter((meal) => isSameDay(new Date(meal.createdAt), selectedDate))
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
+const DiaryMeals = ({ filteredMeals, loading }) => {
+  
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-20 space-y-4">
@@ -45,8 +15,8 @@ const DiaryMeals = ({ selectedDate }) => {
   }
 
   return (
-    <div className="space-y-8 relative">
-      {filteredMeals.length > 0 ? (
+    <div className="space-y-8 relative mt-8">
+      {filteredMeals && filteredMeals.length > 0 ? (
         <div className="relative">
           {/* Vertical Timeline Line */}
           <div className="absolute left-[19px] top-2 bottom-2 w-px bg-slate-200" />
@@ -89,26 +59,28 @@ const DiaryMeals = ({ selectedDate }) => {
                     </div>
                   </div>
 
-                  {/* Nutrition Table (Styled for Tailwind) */}
+                  {/* Nutrition Table */}
                   <div className="overflow-hidden border border-slate-100 rounded-2xl mb-6">
                     <table className="w-full text-left text-sm">
                       <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold tracking-wider">
                         <tr>
                           <th className="px-4 py-3">Food Item</th>
                           <th className="px-4 py-3 text-right">Cals</th>
-                          <th className="px-4 py-3 text-right">P</th>
-                          <th className="px-4 py-3 text-right">C</th>
-                          <th className="px-4 py-3 text-right">F</th>
+                          <th className="px-4 py-3 text-right">Pro</th>
+                          <th className="px-4 py-3 text-right">Carbs</th>
+                          <th className="px-4 py-3 text-right">Sugar</th>
+                          <th className="px-4 py-3 text-right">Chol</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-50">
                         {meal.foods.map((food) => (
                           <tr key={food._id} className="hover:bg-slate-50 transition-colors">
-                            <td className="px-4 py-3 font-semibold text-slate-700">{food.name}</td>
-                            <td className="px-4 py-3 text-right text-slate-600">{Math.round(food.calories)}</td>
+                            <td className="px-4 py-3 font-semibold text-slate-700 capitalize">{food.name}</td>
+                            <td className="px-4 py-3 text-right text-slate-600 font-bold">{Math.round(food.calories)}</td>
                             <td className="px-4 py-3 text-right text-slate-500">{food.protein?.toFixed(1)}g</td>
                             <td className="px-4 py-3 text-right text-slate-500">{food.carbs?.toFixed(1)}g</td>
-                            <td className="px-4 py-3 text-right text-slate-500">{food.fat?.toFixed(1)}g</td>
+                            <td className="px-4 py-3 text-right text-slate-500">{food.sugar?.toFixed(1)}g</td>
+                            <td className="px-4 py-3 text-right text-slate-500">{food.cholesterol?.toFixed(1)}mg</td>
                           </tr>
                         ))}
                       </tbody>
