@@ -9,6 +9,7 @@ import mealRoutes from "./routes/meal.routes.js";
 import planRoutes from "./routes/plan.routes.js";
 import profileRoutes from "./routes/profile.routes.js"
 import scanRoutes from "./routes/scan.routes.js";
+import authRoutes from "./routes/auth.routes.js";
 
 dotenv.config();
 connectDB();
@@ -18,6 +19,8 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: '50mb' })); 
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
+app.use("/api/auth", authRoutes);
 
 app.use("/api/nutrition", nutritionRoutes);
 

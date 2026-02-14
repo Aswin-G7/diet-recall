@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, Activity, Calendar, MessageCircle, 
   PlusCircle, Settings, BookMarked, HelpCircle, LogOut, X,
-  User // --- IMPORTED USER ICON ---
+  User 
 } from 'lucide-react';
 
 const Sidebar = ({ isOpen, onClose }) => {
@@ -24,9 +24,23 @@ const Sidebar = ({ isOpen, onClose }) => {
     { to: '/diary', label: 'Food Diary', icon: Calendar },
     { to: '/chat', label: 'AI Coach', icon: MessageCircle },
     { to: '/recipes', label: 'Recipes', icon: BookMarked },
-    // --- ADDED PROFILE LINK HERE ---
     { to: '/profile', label: 'My Profile', icon: User },
   ];
+
+  // --- ADDED LOGOUT HANDLER ---
+  const handleLogout = () => {
+    // 1. Remove the user's ID and token from local storage
+    localStorage.removeItem("userId");
+    localStorage.removeItem("token"); 
+    localStorage.removeItem("userProfile");
+    
+    // Optional: You can also clear the profile if you want a fresh start
+    // localStorage.removeItem("userProfile"); 
+
+    // 2. Reload the page. This forces App.jsx to check for the user again, 
+    // realize they are gone, and show the Login screen.
+    window.location.href = "/"; 
+  };
 
   return (
     <>
@@ -101,8 +115,12 @@ const Sidebar = ({ isOpen, onClose }) => {
               <Settings size={20} className="text-slate-400" />
               Settings
             </Link>
-             
-            <button className="flex items-center gap-3 px-4 py-3 w-full rounded-2xl text-sm font-semibold text-rose-500 hover:bg-rose-50 transition-all">
+              
+            {/* --- ATTACHED THE onClick EVENT HERE --- */}
+            <button 
+              onClick={handleLogout}
+              className="flex items-center gap-3 px-4 py-3 w-full rounded-2xl text-sm font-semibold text-rose-500 hover:bg-rose-50 transition-all"
+            >
               <LogOut size={20} className="text-rose-400" />
               Logout
             </button>

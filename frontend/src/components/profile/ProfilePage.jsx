@@ -43,16 +43,7 @@ const ProfilePage = () => {
     setFormData(prev => ({ ...prev, goal }));
   };
 
-  // --- API LOGIC (Unchanged) ---
-  const getOrCreateUserId = () => {
-    let userId = localStorage.getItem("userId");
-    if (!userId) {
-      userId = crypto.randomUUID();
-      localStorage.setItem("userId", userId);
-    }
-    return userId;
-  };
-
+  // --- API LOGIC ---
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isDirty) return;
@@ -66,26 +57,41 @@ const ProfilePage = () => {
       return;
     }
 
-    const userId = getOrCreateUserId();
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setError("You must be logged in to save your profile.");
+      setIsSaving(false);
+      return;
+    }
+
     const activeConditions = Object.keys(formData.healthConditions || {})
       .filter(key => formData.healthConditions[key]);
 
     const backendPayload = {
       ...formData,
       conditions: activeConditions,
-      userId: userId
+      // We removed the random userId generation. The backend middleware 
+      // securely grabs the ID from the token anyway!
     };
 
     try {
       const res = await fetch("http://localhost:5000/api/profile", {
         method: "POST",
-        headers: { "Content-Type": "application/json", "x-user-id": userId },
+        headers: { 
+          "Content-Type": "application/json", 
+          "Authorization": `Bearer ${token}` 
+        },
         body: JSON.stringify(backendPayload),
       });
 
       if (!res.ok) throw new Error("Failed to save profile");
 
       const savedProfile = await res.json();
+      
+      // Update local storage so TodaysPlan.jsx doesn't have to fetch it again
+      localStorage.setItem("userProfile", JSON.stringify(savedProfile));
+      
+      // Update global context
       updateProfile({ ...formData, ...savedProfile });
       
       setShowFeedback(true);

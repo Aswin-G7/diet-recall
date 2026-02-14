@@ -21,8 +21,6 @@ const MealSection = ({ title, placeholder, mealType }) => {
   const [registering, setRegistering] = useState(false);
   const [success, setSuccess] = useState("");
 
-  const getUserId = () => localStorage.getItem("userId");
-
   // ---------------- HELPER: Calculate Totals ----------------
   const totals = useMemo(() => {
     if (!nutritionData || nutritionData.length === 0) return null;
@@ -46,9 +44,14 @@ const MealSection = ({ title, placeholder, mealType }) => {
     setSuccess("");
 
     try {
+      const token = localStorage.getItem("token"); // 🚨 GET TOKEN
+
       const response = await fetch("http://localhost:5000/api/nutrition", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` // 🚨 SEND TOKEN
+        },
         body: JSON.stringify({ query }),
       });
 
@@ -75,7 +78,7 @@ const MealSection = ({ title, placeholder, mealType }) => {
     setError("");
 
     try {
-      const userId = getUserId();
+      const token = localStorage.getItem("token"); 
       
       const saveResponse = await fetch(
         "http://localhost:5000/api/meals/register",
@@ -83,7 +86,7 @@ const MealSection = ({ title, placeholder, mealType }) => {
           method: "POST",
           headers: { 
             "Content-Type": "application/json",
-            "x-user-id": userId 
+            "Authorization": `Bearer ${token}` 
           },
           body: JSON.stringify({
             mealType,

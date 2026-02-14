@@ -9,8 +9,6 @@ const DEFAULT_PROFILE = {
   dietType: 'Balanced',
   goal: 'maintain',
   dailyCalorieTarget: 2500,
-  // We keep this object structure for the UI, but we will convert 
-  // it to an array when sending to your backend.
   healthConditions: {
     thyroid: false,
     diabetes: false,
@@ -23,13 +21,65 @@ const AppContext = createContext();
 export const AppProvider = ({ children }) => {
   const [loggedEntries, setLoggedEntries] = useState([]);
   
-  // Load profile from local storage on boot
+  // 1. Load profile from local storage on boot
   const [userProfile, setUserProfile] = useState(() => {
-    const saved = localStorage.getItem('userProfile'); // Changed to match your old key name if you prefer
-    return saved ? JSON.parse(saved) : DEFAULT_PROFILE;
+    const saved = localStorage.getItem('userProfile');
+    if (saved && saved !== "undefined") {
+      const parsed = JSON.parse(saved);
+      // Only trust the cache if it's a REAL profile from the DB (has an _id or userId)
+      if (parsed._id || parsed.userId) return parsed;
+    }
+    return DEFAULT_PROFILE;
   });
 
-  // Save to local storage whenever profile changes
+  // 2. 🚨 THE FIX: Fetch real profile from MongoDB on mount/login 🚨
+  useEffect(() => {
+    const fetchRealProfile = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return; // Stop if not logged in
+
+      try {
+        const res = await fetch("http://localhost:5000/api/profile", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}` // Use the secure VIP Pass
+          }
+        });
+
+        if (res.ok) {
+          const dbProfile = await res.json();
+          
+          // Data Converter: DB uses Array (["bp", "diabetes"]), UI uses Object {bp: true}
+          let mappedConditions = { ...DEFAULT_PROFILE.healthConditions };
+          if (Array.isArray(dbProfile.conditions)) {
+            dbProfile.conditions.forEach(cond => {
+              mappedConditions[cond] = true;
+            });
+          } else if (dbProfile.healthConditions) {
+             mappedConditions = { ...mappedConditions, ...dbProfile.healthConditions };
+          }
+
+          // Merge everything securely
+          const mergedProfile = {
+            ...DEFAULT_PROFILE,
+            ...dbProfile,
+            healthConditions: mappedConditions
+          };
+
+          // Update React state AND overwrite the local storage cache
+          setUserProfile(mergedProfile);
+          localStorage.setItem('userProfile', JSON.stringify(mergedProfile));
+        }
+      } catch (error) {
+        console.error("Failed to fetch real profile from DB:", error);
+      }
+    };
+
+    fetchRealProfile();
+  }, []); // Empty array ensures this runs right when the app opens
+
+  // 3. Save to local storage whenever profile state changes locally
   useEffect(() => {
     localStorage.setItem('userProfile', JSON.stringify(userProfile));
   }, [userProfile]);

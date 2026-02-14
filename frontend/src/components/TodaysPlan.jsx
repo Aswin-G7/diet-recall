@@ -14,13 +14,23 @@ const TodaysPlan = () => {
 
         // 1. Try to get profile from Local Storage
         let profile = null;
-        const savedProfile = localStorage.getItem("userProfile");
+        const savedProfileStr = localStorage.getItem("userProfile");
 
-        if (savedProfile && savedProfile !== "undefined") {
-          profile = JSON.parse(savedProfile);
-        } else {
-          // 2. FALLBACK: Fetch from MongoDB if Local Storage is empty
-          console.log("Local storage empty, fetching profile from DB...");
+        if (savedProfileStr && savedProfileStr !== "undefined") {
+          const parsedProfile = JSON.parse(savedProfileStr);
+          
+          // 🚨 THE FIX: Verify the cached profile belongs to the logged-in user
+          if (parsedProfile.userId === userId) {
+            profile = parsedProfile;
+          } else {
+            console.log("Cached profile belongs to someone else. Discarding.");
+            localStorage.removeItem("userProfile");
+          }
+        }
+
+        // 2. FALLBACK: Fetch from MongoDB if profile is null (Empty or discarded)
+        if (!profile) {
+          console.log("Fetching fresh profile from DB...");
           const profileRes = await fetch("http://localhost:5000/api/profile", {
             method: "GET",
             headers: {
@@ -53,7 +63,7 @@ const TodaysPlan = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "x-user-id": userId
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
           },
           body: JSON.stringify({
             age: profile.age,

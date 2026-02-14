@@ -10,15 +10,27 @@ const WeeklyProgress = () => {
   useEffect(() => {
     const fetchWeeklyCalories = async () => {
       try {
-        const res = await fetch(
-          "http://localhost:5000/api/meals/weekly-calories"
-        );
+        const token = localStorage.getItem("token"); // 🚨 GET TOKEN
+
+        const res = await fetch("http://localhost:5000/api/meals/weekly-calories", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}` // 🚨 SEND TOKEN
+          }
+        });
+        
+        if (!res.ok) throw new Error("Failed to fetch weekly calories");
+        
         const result = await res.json();
 
-        setLabels(result.labels);
-        setData(result.data);
+        // Ensure arrays are set even if backend returns empty
+        setLabels(result?.labels || []);
+        setData(result?.data || []);
       } catch (error) {
-        console.error("Failed to fetch weekly calories", error);
+        console.error("Failed to fetch weekly calories:", error);
+        setLabels([]);
+        setData([]);
       } finally {
         setLoading(false);
       }
@@ -27,13 +39,14 @@ const WeeklyProgress = () => {
     fetchWeeklyCalories();
   }, []);
 
-  // 📊 Calculations
-  const total = data.reduce((sum, val) => sum + val, 0);
-  const average = data.length ? Math.round(total / data.length) : 0;
+  // 📊 Calculations (Protected with Optional Chaining)
+  const total = data?.reduce((sum, val) => sum + (val || 0), 0) || 0;
+  const average = data?.length ? Math.round(total / data.length) : 0;
 
-  const maxCalories = Math.max(...data);
-  const bestDayIndex = data.indexOf(maxCalories);
-  const bestDay = maxCalories > 0 ? labels[bestDayIndex] : "-";
+  // Calculate Best Day Safely
+  const maxCalories = data?.length ? Math.max(...data) : 0;
+  const bestDayIndex = maxCalories > 0 ? data.indexOf(maxCalories) : -1;
+  const bestDay = bestDayIndex !== -1 && labels[bestDayIndex] ? labels[bestDayIndex] : "-";
 
   const chartOptions = {
     chart: {

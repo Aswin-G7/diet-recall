@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppProvider } from "./AppContext";
 
@@ -17,9 +17,22 @@ import FoodScanner from "./components/FoodScanner";
 
 import "./App.css"; // Ensures your .app CSS is loaded
 import Settings from "./components/Settings";
+import Auth from "./components/Auth";
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token"));
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+
+  // The Auth component calls this function after the fake 1.5s loading finishes
+  const handleLogin = (userData) => {
+    console.log("User logged in!", userData);
+    setIsAuthenticated(true);
+  };
+
+  if (!isAuthenticated) {
+    return <Auth onLogin={handleLogin} />;
+  }
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 

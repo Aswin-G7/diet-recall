@@ -1,16 +1,13 @@
 import UserProfile from "../models/UserProfile.js";
 
-// TEMP user resolver (replace with auth later)
-const getUserId = (req) => {
-  return req.headers["x-user-id"]; // frontend will send this for now
-};
-
 // 🔹 Create / Update profile
 export const upsertProfile = async (req, res) => {
   try {
-    const userId = getUserId(req);
+    // 🚨 THE FIX: Grab the securely verified ID from the middleware!
+    const userId = req.user; 
+    
     if (!userId) {
-      return res.status(401).json({ message: "User not identified" });
+      return res.status(401).json({ message: "User not authorized" });
     }
 
     const {
@@ -58,9 +55,11 @@ export const upsertProfile = async (req, res) => {
 // 🔹 Fetch profile
 export const getProfile = async (req, res) => {
   try {
-    const userId = getUserId(req);
+    // 🚨 THE FIX: Grab the securely verified ID from the middleware!
+    const userId = req.user; 
+    
     if (!userId) {
-      return res.status(401).json({ message: "User not identified" });
+      return res.status(401).json({ message: "User not authorized" });
     }
 
     const profile = await UserProfile.findOne({ userId }).lean();

@@ -12,6 +12,13 @@ const foodItemSchema = new mongoose.Schema({
 
 const mealSchema = new mongoose.Schema(
   {
+    // 🚨 1. ADDED USER ID (Crucial for multi-user security)
+    userId: {
+      type: String, // String handles both UUIDs and MongoDB ObjectIds
+      required: true,
+      index: true, // Makes searching for a user's diary incredibly fast
+    },
+
     mealType: {
       type: String,
       enum: ["breakfast", "lunch", "snack", "dinner"],
@@ -20,7 +27,9 @@ const mealSchema = new mongoose.Schema(
 
     rawInput: {
       type: String,
-      required: true, // 👈 THIS is causing your error
+      // 🚨 2. FIXED: Changed to false so your app doesn't crash 
+      // if you log a food without typing a specific search query
+      required: false, 
     },
 
     foods: {

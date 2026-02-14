@@ -12,16 +12,29 @@ const ProgressSummary = () => {
   useEffect(() => {
     const fetchSummary = async () => {
       try {
-        const res = await fetch(
-          "http://localhost:5000/api/meals/summary/today"
-        );
+        const token = localStorage.getItem("token"); // 🚨 GET TOKEN
+
+        const res = await fetch("http://localhost:5000/api/meals/summary/today", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}` // 🚨 SEND TOKEN
+          }
+        });
 
         if (!res.ok) throw new Error("Failed to fetch summary");
 
         const data = await res.json();
-        setSummary(data);
+        setSummary({
+          calories: data?.calories || 0,
+          protein: data?.protein || 0,
+          carbs: data?.carbs || 0,
+          sugar: data?.sugar || 0,
+        });
       } catch (err) {
-        console.error(err);
+        console.error("Summary fetch error:", err);
+        // Fallback to zeroes if fetch fails
+        setSummary({ calories: 0, protein: 0, carbs: 0, sugar: 0 });
       }
     };
 
@@ -35,23 +48,25 @@ const ProgressSummary = () => {
       <div className="summary-grid">
         <div className="summary-card">
           <h3>Calories</h3>
-          <p className="summary-value">{summary.calories} kcal</p>
+          <p className="summary-value">{Math.round(summary.calories)} kcal</p>
+          {/* Optional: You can pull '2000' from AppContext later if you want a dynamic goal! */}
           <span className="summary-sub">/ 2000 kcal</span>
         </div>
 
         <div className="summary-card">
           <h3>Protein</h3>
-          <p className="summary-value">{summary.protein} g</p>
+          <p className="summary-value">{Math.round(summary.protein)} g</p>
         </div>
 
         <div className="summary-card">
           <h3>Carbs</h3>
-          <p className="summary-value">{summary.carbs.toFixed(1)} g</p>
+          {/* Use optional chaining and fallback for toFixed to prevent crashes */}
+          <p className="summary-value">{(summary.carbs || 0).toFixed(1)} g</p>
         </div>
 
         <div className="summary-card">
           <h3>Sugar</h3>
-          <p className="summary-value">{summary.sugar} g</p>
+          <p className="summary-value">{Math.round(summary.sugar)} g</p>
         </div>
       </div>
     </section>

@@ -27,12 +27,16 @@ const NutriChat = () => {
     ]);
 
     try {
-      // Keep your existing API format
+      const token = localStorage.getItem("token"); // 🚨 GET TOKEN
+
       const apiMessages = [{ role: "user", content: userText }];
 
       const response = await fetch("http://localhost:5000/api/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` // 🚨 SEND TOKEN
+        },
         body: JSON.stringify({ messages: apiMessages }),
       });
 

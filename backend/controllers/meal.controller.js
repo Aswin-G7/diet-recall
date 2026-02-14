@@ -4,6 +4,7 @@ import { estimateCaloriesAndProtein } from "../services/openRouter.service.js";
 
 export const registerMeal = async (req, res) => {
   try {
+    const userId = req.user; // 🚨 1. Get the secure user ID
     const { nutritionData, query, mealType } = req.body;
 
     if (!mealType) {
@@ -47,7 +48,7 @@ export const registerMeal = async (req, res) => {
           name: item.name,
           calories: calories ?? 0,
           serving: item.serving_size_g ?? 0,
-          protein: protein ?? 0, // <-- Use 0 if missing
+          protein: protein ?? 0, 
           carbs: item.carbohydrates_total_g ?? 0,
           sugar: item.sugar_g ?? 0,
           cholesterol: item.cholesterol_mg ?? 0,
@@ -60,24 +61,12 @@ export const registerMeal = async (req, res) => {
     }
 
     // 🔹 Calculate totals
-    const totalCalories = finalData.reduce(
-      (sum, f) => sum + (f.calories || 0),
-      0
-    );
-
-    const totalProtein = finalData.reduce(
-      (sum, f) => sum + (f.protein || 0),
-      0
-    );
-
-    // console.log("Final data to be saved:", finalData);
-
-    // finalData.forEach((f) => {
-    //   console.log(f.name, "protein:", f.protein, typeof f.protein);
-    // });
+    const totalCalories = finalData.reduce((sum, f) => sum + (f.calories || 0), 0);
+    const totalProtein = finalData.reduce((sum, f) => sum + (f.protein || 0), 0);
 
     // 🔹 Create ONE meal document
     const meal = await Meal.create({
+      userId, // 🚨 2. Attach the meal permanently to this user!
       mealType,
       rawInput: query,
       foods: finalData,
@@ -97,6 +86,8 @@ export const registerMeal = async (req, res) => {
 
 export const getTodaySummary = async (req, res) => {
   try {
+    const userId = req.user; // 🚨 Get user ID
+
     const start = new Date();
     start.setHours(0, 0, 0, 0);
 
@@ -104,6 +95,7 @@ export const getTodaySummary = async (req, res) => {
     end.setHours(23, 59, 59, 999);
 
     const meals = await Meal.find({
+      userId, // 🚨 Only find THIS user's meals
       createdAt: { $gte: start, $lte: end },
     });
 
@@ -131,37 +123,28 @@ export const getTodaySummary = async (req, res) => {
 
 export const getWeeklyCalories = async (req, res) => {
   try {
-    // 🔹 Get current time in IST
+    const userId = req.user; // 🚨 Get user ID
+
     const nowIST = new Date(
       new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
     );
 
-    // 🔹 End of today (IST)
     const endIST = new Date(nowIST);
     endIST.setHours(23, 59, 59, 999);
 
-    // 🔹 Start of 6 days ago (IST)
     const startIST = new Date(endIST);
     startIST.setDate(startIST.getDate() - 6);
     startIST.setHours(0, 0, 0, 0);
 
-    // 🔹 Convert IST → UTC for MongoDB
     const startUTC = new Date(startIST.toISOString());
     const endUTC = new Date(endIST.toISOString());
 
     const meals = await Meal.find({
+      userId, // 🚨 Only find THIS user's meals
       createdAt: { $gte: startUTC, $lte: endUTC },
     });
 
-    const daysMap = {
-      Mon: 0,
-      Tue: 0,
-      Wed: 0,
-      Thu: 0,
-      Fri: 0,
-      Sat: 0,
-      Sun: 0,
-    };
+    const daysMap = { Mon: 0, Tue: 0, Wed: 0, Thu: 0, Fri: 0, Sat: 0, Sun: 0 };
 
     meals.forEach((meal) => {
       const day = meal.createdAt.toLocaleDateString("en-US", {
@@ -184,8 +167,10 @@ export const getWeeklyCalories = async (req, res) => {
 
 export const getDiaryMeals = async (req, res) => {
   try {
-    const meals = await Meal.find()
-      .sort({ createdAt: -1 }); // latest first
+    const userId = req.user; // 🚨 Get user ID
+
+    const meals = await Meal.find({ userId }) // 🚨 Only find THIS user's meals
+      .sort({ createdAt: -1 });
 
     res.status(200).json(meals);
   } catch (error) {
@@ -193,4 +178,3 @@ export const getDiaryMeals = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch diary meals" });
   }
 };
-

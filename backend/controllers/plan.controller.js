@@ -14,7 +14,7 @@ export const getTodaysPlan = async (req, res) => {
       dietType // Make sure this is coming from frontend
     } = req.body;
 
-    const userId = req.headers["x-user-id"];
+    const userId = req.user;
     
     // --- DEBUG LOGS (Check your VS Code Terminal) ---
     console.log("----- GENERATING PLAN -----");
