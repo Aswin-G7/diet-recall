@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
+import { useApp } from "../../AppContext"; // 1. Import the Context
 import "./ProgressSummary.css";
 
 const ProgressSummary = () => {
+  const { userProfile } = useApp(); // 2. Get the user profile
+  
   const [summary, setSummary] = useState({
     calories: 0,
     protein: 0,
@@ -12,13 +15,13 @@ const ProgressSummary = () => {
   useEffect(() => {
     const fetchSummary = async () => {
       try {
-        const token = localStorage.getItem("token"); // 🚨 GET TOKEN
+        const token = localStorage.getItem("token");
 
         const res = await fetch("http://localhost:5000/api/meals/summary/today", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}` // 🚨 SEND TOKEN
+            "Authorization": `Bearer ${token}`
           }
         });
 
@@ -33,13 +36,15 @@ const ProgressSummary = () => {
         });
       } catch (err) {
         console.error("Summary fetch error:", err);
-        // Fallback to zeroes if fetch fails
         setSummary({ calories: 0, protein: 0, carbs: 0, sugar: 0 });
       }
     };
 
     fetchSummary();
   }, []);
+
+  // 3. Get the dynamic goal (Default to 2000 if loading or missing)
+  const dailyGoal = userProfile?.dailyCalorieTarget || 2000;
 
   return (
     <section className="progress-section">
@@ -49,8 +54,8 @@ const ProgressSummary = () => {
         <div className="summary-card">
           <h3>Calories</h3>
           <p className="summary-value">{Math.round(summary.calories)} kcal</p>
-          {/* Optional: You can pull '2000' from AppContext later if you want a dynamic goal! */}
-          <span className="summary-sub">/ 2000 kcal</span>
+          {/* 4. Display the dynamic goal */}
+          <span className="summary-sub">/ {dailyGoal} kcal</span>
         </div>
 
         <div className="summary-card">
@@ -60,7 +65,6 @@ const ProgressSummary = () => {
 
         <div className="summary-card">
           <h3>Carbs</h3>
-          {/* Use optional chaining and fallback for toFixed to prevent crashes */}
           <p className="summary-value">{(summary.carbs || 0).toFixed(1)} g</p>
         </div>
 
