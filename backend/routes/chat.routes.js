@@ -8,6 +8,7 @@ const router = express.Router();
 router.post("/", protect, async (req, res) => {
   try {
     const { messages } = req.body;
+    const userId = req.user; // 1. Get the ID from the token (provided by 'protect')
 
     if (!messages || !Array.isArray(messages)) {
       return res.status(400).json({ error: "Messages array required" });
@@ -15,7 +16,7 @@ router.post("/", protect, async (req, res) => {
 
     // Optional: You now have access to req.user if you ever want the Chatbot 
     // to know the user's ID to fetch their specific goals!
-    const reply = await getChatReply(messages);
+    const reply = await getChatReply(messages, userId);
 
     res.json({ reply });
   } catch (err) {

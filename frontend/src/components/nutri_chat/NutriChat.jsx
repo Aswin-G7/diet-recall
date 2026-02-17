@@ -20,24 +20,31 @@ const NutriChat = () => {
     setInput("");
     setIsLoading(true);
 
-    // Add user message to UI
-    setMessages((prev) => [
-      ...prev,
+    // 1. Update UI immediately with the new user message
+    const newMessages = [
+      ...messages,
       { id: Date.now(), text: userText, sender: "user" },
-    ]);
+    ];
+    setMessages(newMessages);
 
     try {
-      const token = localStorage.getItem("token"); // 🚨 GET TOKEN
+      const token = localStorage.getItem("token");
 
-      const apiMessages = [{ role: "user", content: userText }];
+      // 🚨 FIX: Enable Memory
+      // Convert UI messages to API format (role: "user" | "assistant")
+      // We grab the last 10 messages so the AI remembers the context
+      const historyForApi = newMessages.slice(-10).map((msg) => ({
+        role: msg.sender === "user" ? "user" : "assistant",
+        content: msg.text,
+      }));
 
       const response = await fetch("http://localhost:5000/api/chat", {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}` // 🚨 SEND TOKEN
+          "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify({ messages: apiMessages }),
+        body: JSON.stringify({ messages: historyForApi }), // 🚨 Sending HISTORY
       });
 
       if (!response.ok) throw new Error("Chat API failed");
@@ -54,6 +61,7 @@ const NutriChat = () => {
         },
       ]);
     } catch (err) {
+      console.error(err);
       setMessages((prev) => [
         ...prev,
         {
