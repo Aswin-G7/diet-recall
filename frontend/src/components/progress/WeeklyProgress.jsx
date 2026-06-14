@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import "./WeeklyProgress.css";
+import { API_URL } from "../../config/api";
 
 const WeeklyProgress = () => {
   const [labels, setLabels] = useState([]);
@@ -12,7 +13,7 @@ const WeeklyProgress = () => {
       try {
         const token = localStorage.getItem("token"); // 🚨 GET TOKEN
 
-        const res = await fetch("http://localhost:5000/api/meals/weekly-calories", {
+        const res = await fetch(`${API_URL}/api/meals/weekly-calories`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

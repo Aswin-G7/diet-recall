@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { API_URL } from "./config/api";
 
 // Default profile structure matching your requirements
 const DEFAULT_PROFILE = {
@@ -39,7 +40,7 @@ export const AppProvider = ({ children }) => {
       if (!token) return; // Stop if not logged in
 
       try {
-        const res = await fetch("http://localhost:5000/api/profile", {
+        const res = await fetch(`${API_URL}/api/profile`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Sparkles, Clock, Flame } from "lucide-react";
+import { API_URL } from "../config/api";
 
 const TodaysPlan = () => {
   const [plan, setPlan] = useState(null);
@@ -31,7 +32,7 @@ const TodaysPlan = () => {
         // 2. FALLBACK: Fetch from MongoDB if profile is null (Empty or discarded)
         if (!profile) {
           console.log("Fetching fresh profile from DB...");
-          const profileRes = await fetch("http://localhost:5000/api/profile", {
+          const profileRes = await fetch(`${API_URL}/api/profile`, {
             method: "GET",
             headers: {
               "x-user-id": userId, // Sending the userId to find the right profile
@@ -59,7 +60,7 @@ const TodaysPlan = () => {
         const dietTypeToSend = profile.dietType || "Balanced";
 
         // 4. GENERATE PLAN
-        const res = await fetch("http://localhost:5000/api/plan/today", {
+        const res = await fetch(`${API_URL}/api/plan/today`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -12,6 +12,7 @@ import {
   Utensils,
   ChevronDown
 } from 'lucide-react';
+import { API_URL } from "../../config/api";
 
 const MealSection = ({ title, placeholder, mealType }) => {
   const [query, setQuery] = useState("");
@@ -46,7 +47,7 @@ const MealSection = ({ title, placeholder, mealType }) => {
     try {
       const token = localStorage.getItem("token"); // 🚨 GET TOKEN
 
-      const response = await fetch("http://localhost:5000/api/nutrition", {
+      const response = await fetch(`${API_URL}/api/nutrition`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -81,7 +82,7 @@ const MealSection = ({ title, placeholder, mealType }) => {
       const token = localStorage.getItem("token"); 
       
       const saveResponse = await fetch(
-        "http://localhost:5000/api/meals/register",
+        `${API_URL}/api/meals/register`,
         {
           method: "POST",
           headers: { 

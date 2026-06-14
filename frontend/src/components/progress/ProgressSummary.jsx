@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useApp } from "../../AppContext"; // 1. Import the Context
 import "./ProgressSummary.css";
+import { API_URL } from "../../config/api";
 
 const ProgressSummary = () => {
   const { userProfile } = useApp(); // 2. Get the user profile
@@ -17,7 +18,7 @@ const ProgressSummary = () => {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await fetch("http://localhost:5000/api/meals/summary/today", {
+        const res = await fetch(`${API_URL}/api/meals/summary/today`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

@@ -3,6 +3,7 @@ import DiaryDateHeader from "./DiaryDateHeader";
 import DiaryMeals from "./DiaryMeals";
 import DiarySummary from "./DiarySummary";
 import "./FoodDiaryPage.css";
+import { API_URL } from "../../config/api";
 
 const isSameDay = (d1, d2) => {
   return (
@@ -24,7 +25,7 @@ const FoodDiaryPage = () => {
       try {
         const token = localStorage.getItem("token"); // 🚨 1. Grab the token
 
-        const res = await fetch("http://localhost:5000/api/meals/diary", {
+        const res = await fetch(`${API_URL}/api/meals/diary`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

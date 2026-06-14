@@ -14,6 +14,7 @@ import {
   Scale,
 } from "lucide-react";
 import { useApp } from "../AppContext";
+import { API_URL } from "../config/api";
 
 const FoodScanner = () => {
   const [image, setImage] = useState(null);
@@ -111,7 +112,7 @@ const FoodScanner = () => {
     try {
       const token = localStorage.getItem("token");
       // 1. Send to your Backend
-      const res = await fetch("http://localhost:5000/api/scan", {
+      const res = await fetch(`${API_URL}/api/scan`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -157,7 +158,7 @@ const FoodScanner = () => {
       ];
 
       // 2. Send it securely to MongoDB
-      const res = await fetch("http://localhost:5000/api/meals/register", {
+      const res = await fetch(`${API_URL}/api/meals/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

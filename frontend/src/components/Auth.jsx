@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Activity, ArrowRight, ShieldCheck, Sparkles, Heart, Mail, Lock, User, Loader2 } from 'lucide-react';
+import { API_URL } from "../config/api";
 
 const Auth = ({ onLogin }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -23,7 +24,7 @@ const Auth = ({ onLogin }) => {
       // Choose the right endpoint based on if we are logging in or signing up
       const endpoint = isLogin ? "/api/auth/login" : "/api/auth/register";
       
-      const res = await fetch(`http://localhost:5000${endpoint}`, {
+      const res = await fetch(`${API_URL}${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

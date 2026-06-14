@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { User, Save, CheckCircle2, Loader2 } from 'lucide-react';
 import { useApp } from '../../AppContext';
+import { API_URL } from "../../config/api";
 
 // Import Sub-Components
 import PersonalDetails from './PersonalDetails';
@@ -75,7 +76,7 @@ const ProfilePage = () => {
     };
 
     try {
-      const res = await fetch("http://localhost:5000/api/profile", {
+      const res = await fetch(`${API_URL}/api/profile`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json", 

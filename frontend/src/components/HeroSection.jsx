@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useApp } from '../AppContext'; // Access the profile for the Goal
 import { Loader2 } from 'lucide-react';
+import { API_URL } from "../config/api";
 
 const HeroSection = () => {
   const { userProfile } = useApp();
@@ -14,7 +15,7 @@ const HeroSection = () => {
         const token = localStorage.getItem("token");
         if (!token) return;
 
-        const res = await fetch("http://localhost:5000/api/meals/summary/today", {
+        const res = await fetch(`${API_URL}/api/meals/summary/today`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
